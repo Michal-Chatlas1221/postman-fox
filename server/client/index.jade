@@ -16,11 +16,11 @@ html(lang='en')
           button.login__button(type='submit') START GAME
         button(type='button') see instructions
       section#game.game(v-show="state === 'GAME'")
-        div(v-show="loaded === false")
-          p loading
+        p(v-show="!loaded") waiting for the next round to start
         #game-wrapper  
       section#leaderboard.leaderboard(v-show="state === 'LEADERBOARD'")
         h2 here be table
+    script(src='node_modules/lodash/lodash.min.js')
     script(src='node_modules/vue/dist/vue.min.js')
     script(src='node_modules/socket.io-client/socket.io.js')
     script(src='node_modules/phaser/dist/pixi.min.js')

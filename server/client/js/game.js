@@ -21,6 +21,8 @@
         var bullets;
         var bulletTime = 0;
 
+        var hasPackage = false;
+
         function create() {
 
             //  This will run in Canvas mode, so let's gain a little speed and display
@@ -112,8 +114,14 @@
             screenWrap(sprite);
 
 
-            game.physics.arcade.collide(sprite, planetSprite, onPackagePick);
-            game.physics.arcade.collide(sprite, targetPlanetSprite, onTargetCollision);
+            game.physics.arcade.collide(sprite, planetSprite, function () {
+                if(!hasPackage) onPackagePick();
+                hasPackage = true;
+            });
+            game.physics.arcade.collide(sprite, targetPlanetSprite, function () {
+                if(hasPackage) onTargetCollision();
+                hasPackage = false;
+            });
 
             bullets.forEachExists(screenWrap, this);
 
