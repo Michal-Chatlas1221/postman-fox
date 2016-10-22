@@ -4,13 +4,9 @@ const User = require('../models/user');
 
 /* GET users listing. */
 router.post('/', (req, res) => {
-
-    console.log(req.cookies.userid);
-
     let user = new User();
     user.name = req.body.name;
     user.save(err => {
-        res.cookie('userid', user.id, {maxAge: 900000});
         res.send(user);
     });
 });
