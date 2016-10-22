@@ -52,11 +52,11 @@
             planetSprite = game.add.sprite(60, 300, 'planet');
             planetSprite.anchor.set(0.5);
 
-            //  Target planet
+
             targetPlanetSprite = game.add.sprite(700, 300, 'targetPlanet');
             targetPlanetSprite.anchor.set(0.5);
 
-            //  and its physics settings
+
             game.physics.enable(sprite, Phaser.Physics.ARCADE);
             game.physics.enable(planetSprite, Phaser.Physics.ARCADE);
             game.physics.enable(targetPlanetSprite, Phaser.Physics.ARCADE);
@@ -108,11 +108,6 @@
             {
                 sprite.body.angularVelocity = 0;
             }
-
-            // if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            // {
-            //     fireBullet();
-            // }
 
             screenWrap(sprite);
 
