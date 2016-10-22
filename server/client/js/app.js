@@ -3,6 +3,19 @@
 
     const appStates = {LOGIN: 'LOGIN', GAME: 'GAME', LEADERBOARD: 'LEADERBOARD'};
 
+    var socket = io('http://localhost:1923');
+
+    socket.on('connection', function (msg) {
+        console.log('msg', msg);
+    } );
+
+    // io.on('connection', function(socket){
+    //     console.log('a user connected');
+    //     socket.on('disconnect', function(){
+    //         console.log('user disconnected');
+    //     });
+    // });
+
     var app = new Vue({
         el: '#app',
         data: {
