@@ -12,5 +12,10 @@
   "license": "ISC",
   "devDependencies": {
     "http-server": "^0.9.0"
+  },
+  "dependencies": {
+    "phaser": "^2.6.2",
+    "vue": "^2.0.3",
+    "vue-socket.io": "^1.0.2"
   }
 }
