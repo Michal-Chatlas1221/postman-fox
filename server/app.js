@@ -62,7 +62,7 @@ app.use(function(err, req, res, next) {
 mongoose.Promise = global.Promise;
 mongoose.connect(config.database);
 
-//ioSetup();
+ioSetup();
 
 
 module.exports = app;

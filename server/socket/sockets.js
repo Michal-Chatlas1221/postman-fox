@@ -1,5 +1,8 @@
 var app = require('express')();
-var io = require('socket.io')(1923);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(1923);
 
 const setup = () => {
     io.on('connection', function(socket){
