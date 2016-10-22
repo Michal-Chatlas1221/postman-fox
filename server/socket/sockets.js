@@ -11,7 +11,7 @@ const setup = () => {
         time: 0,
         gameTime: 10,
         pauseTime: 1,
-        timeUnit: 10
+        timeUnit: 2
     };
 
     let leaderBoard = [];
@@ -36,26 +36,41 @@ const setup = () => {
         });
 
         socket.on('gameEvent', (data) => {
-
-            let leaderBoardIndex = leaderBoard.findIndex(e => e.id === data.id);
+            let leaderBoardIndex = leaderBoard.findIndex(e => (e.id == data.id));
             if (leaderBoardIndex !== -1) {
-                leaderBoard[leaderBoardIndex].score += eventValues.find(e => e.name === data.name).value;
+                leaderBoard[leaderBoardIndex].score += eventValues.find(e => e.name == data.name).value;
                 leaderBoard.sort((a, b) => b.score - a.score);
-            } else {
-                let user = User.findOne({_id: data.id});
-                leaderBoard.push({
-                    id: user._id,
-                    name: user.name,
-                    score: 0
-                });
-                leaderBoard[leaderBoard.length - 1].score += eventValues.find(e => e.name === data.name).value;
-                leaderBoard.sort((a, b) => b.score - a.score);
-            }
 
-            io.emit('scores', {
-                state: publicState,
-                eventSpecific: leaderBoard
-            })
+                io.emit('scores', {
+                    state: publicState,
+                    eventSpecific: leaderBoard
+                })
+            } else {
+                 User.findOne({_id: data.id}, function (err, user) {
+                     if(err) {
+                         console.log(err);
+                         return;
+                     }
+
+                     if(!user) {
+                        return;
+                     }
+
+                    leaderBoard.push({
+                        id: user._id,
+                        name: user.name,
+                        score: 0
+                    });
+
+                    leaderBoard[leaderBoard.length - 1].score += eventValues.find(e => e.name === data.name).value;
+                    leaderBoard.sort((a, b) => b.score - a.score);
+
+                    io.emit('scores', {
+                        state: publicState,
+                        eventSpecific: leaderBoard
+                    })
+                });
+            }
         });
     });
 
