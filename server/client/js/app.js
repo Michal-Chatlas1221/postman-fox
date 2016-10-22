@@ -3,7 +3,7 @@
 
     const appStates = {LOGIN: 'LOGIN', GAME: 'GAME', LEADERBOARD: 'LEADERBOARD'};
 
-    var socket = io('http://localhost:1923');
+    var socket = io(':1923');
 
     socket.on('connect', function () {
         console.log('yup its connect');
