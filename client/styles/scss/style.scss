@@ -1,8 +1,10 @@
 $light-blue: #7bc0c0;
 $pink: #d71b5a;
-$white: #fff;
+$white: #ffffff;
+$font-family: 'Montserrat', Helvetica Neue , Helvetica, Arial, sans-serif;
 
 body {
   background: $light-blue;
   color: $white;
+  font-family: $font-family;
 }
