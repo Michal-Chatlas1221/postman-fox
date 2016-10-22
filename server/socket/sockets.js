@@ -7,7 +7,12 @@ const setup = () => {
     server.listen(1923);
 
     io.on('connection', function(socket){
-        console.log('Tomasz Lis connected');
+        socket.on('join', (data) => {
+            console.log(data);
+            socket.emit('connected', {
+                username: data.username
+            });
+        });
     });
 };
 
