@@ -20,9 +20,6 @@
                     .then(function(response) {
                         return response.text()
                     }).then(function (response) {
-                    app.state = appStates.GAME;
-                    app.game = gameFactory();
-                    console.log(JSON.parse(response)._id);
 
                     var socket = io('http://localhost:1923');
 
@@ -35,7 +32,11 @@
 
                     socket.on('connected', function(data) {
                        console.log('connected', data);
+                       startNewGame();
                     });
+
+                    socket.on('start', startNewGame);
+                    socket.on('stop', stopGame);
 
                 });
             },
@@ -48,4 +49,15 @@
         }
     });
 
+
+    function startNewGame(data) {
+        console.log(data);
+        app.state = appStates.GAME;
+        app.game = gameFactory();
+    }
+
+    function stopGame(data) {
+        console.log(data);
+        app.state = appStates.LEADERBOARD;
+    }
 })();
