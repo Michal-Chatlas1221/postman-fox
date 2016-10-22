@@ -1,5 +1,12 @@
 const setup = () => {
 
+    let publicState = {
+        time: 0,
+        gameTime: 10,
+        pauseTime: 1,
+        timeUnit: 10
+    };
+
     var app = require('express')();
     var server = require('http').Server(app);
     var io = require('socket.io')(server);
@@ -10,24 +17,22 @@ const setup = () => {
         socket.on('join', (data) => {
             console.log('asd', data);
             socket.broadcast.emit('connected', {
-                username: data.username
+                state: publicState,
+                eventSpecific: {
+                    username: data.username
+                }
             });
         });
     });
 
-    var time = 0;
-    var gameTime = 10;
-    var pauseTime = 1;
-    var timeUnit = 10;
-
     setInterval(() => {
-        time ++;
-        if (time % (gameTime + pauseTime) === gameTime) {
+        publicState.time ++;
+        if (publicState.time % (publicState.gameTime + publicState.pauseTime) === publicState.gameTime) {
             io.emit('start');
-        } else if(time % (gameTime + pauseTime) === 0) {
+        } else if(publicState.time % (publicState.gameTime + publicState.pauseTime) === 0) {
             io.emit('stop');
         }
-        time = time % (gameTime+pauseTime);
+        publicState.time = publicState.time % (gameTime+pauseTime);
     }, 10000);
 };
 
