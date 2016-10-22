@@ -8,9 +8,11 @@
             game.load.image('space', 'assets/skies/deep-space.jpg');
             game.load.image('bullet', 'assets/games/asteroids/bullets.png');
             game.load.image('ship', 'assets/games/asteroids/ship.png');
+            game.load.image('planet', 'assets/games/asteroids/planet.png');
         }
 
         var sprite;
+        var planetSprite;
         var cursors;
 
         var bullet;
@@ -42,6 +44,10 @@
             //  Our player ship
             sprite = game.add.sprite(300, 300, 'ship');
             sprite.anchor.set(0.5);
+
+            //  NPM planet
+            planetSprite = game.add.sprite(20, 20, 'planet');
+            planetSprite.anchor.set(0.5);
 
             //  and its physics settings
             game.physics.enable(sprite, Phaser.Physics.ARCADE);
@@ -85,6 +91,7 @@
             }
 
             screenWrap(sprite);
+
 
             bullets.forEachExists(screenWrap, this);
 
