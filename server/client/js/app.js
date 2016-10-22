@@ -8,15 +8,15 @@
         data: {
             username: '',
             onLogin: function () {
-                app.state = appStates.GAME;
-                app.game = gameFactory();
                 fetch('/users', {
-                    method: 'post',
-                    data: {
-                        name: app.username
-                    }
+                    method: 'POST',
+                    headers: {
+                      'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({name: app.username})
                 }).then(function (response) {
-                   console.log(response);
+                    app.state = appStates.GAME;
+                    app.game = gameFactory();
                 });
             },
             state: appStates.LOGIN,
