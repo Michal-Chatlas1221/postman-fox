@@ -26,12 +26,15 @@
 
                     var socket = io('http://localhost:1923');
 
-                    socket.on('connection', function (msg) {
+                    socket.on('connect', function () {
                         socket.emit('join', {
                            id: JSON.parse(response)._id,
                             username: app.username
                         });
-                        console.log('msg', msg);
+                    });
+
+                    socket.on('connected', function(data) {
+                       console.log('connected', data);
                     });
 
                 });

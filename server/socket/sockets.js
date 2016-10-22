@@ -8,8 +8,8 @@ const setup = () => {
 
     io.on('connection', function(socket){
         socket.on('join', (data) => {
-            console.log(data);
-            socket.emit('connected', {
+            console.log('asd', data);
+            socket.broadcast.emit('connected', {
                 username: data.username
             });
         });
