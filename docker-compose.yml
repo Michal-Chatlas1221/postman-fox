@@ -12,11 +12,3 @@ server:
    - 3000:3000
  links:
    - mongodb
-client:
-  image: node
-  command: npm run serve
-  working_dir: /app/client
-  volumes:
-     - ./client:/app/client
-  ports:
-    - 8080:8080
