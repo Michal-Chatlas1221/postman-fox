@@ -10,6 +10,14 @@
             onLogin: function () {
                 app.state = appStates.GAME;
                 app.game = gameFactory();
+                fetch('/users', {
+                    method: 'post',
+                    data: {
+                        name: app.username
+                    }
+                }).then(function (response) {
+                   console.log(response);
+                });
             },
             state: appStates.LOGIN,
             game: {},
