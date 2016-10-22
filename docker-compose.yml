@@ -10,5 +10,6 @@ server:
  command: npm run start
  ports:
    - 3000:3000
+   - 1923:1923
  links:
    - mongodb
