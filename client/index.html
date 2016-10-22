@@ -10,21 +10,23 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <h1>Postmanfox</h1>
-
-    <section id="login" class="login">
-        <form action="">
-            <input class="login__input" type="text" name="username">
-            <button type="submit" class="login__button">PLAY</button>
-        </form>
+    <section id="app">
+        <section id="login" class="login">
+            <h1 class="login__header">Postmanfox</h1>
+            <form action="">
+                <input class="login__input" type="text" name="username">
+                <button type="submit" class="login__button">{{message}}</button>
+            </form>
+            <button type="button">see instructions</button>
+        </section>
+        <section class="game" id="game">
+            <h2>here be canvas</h2>
+        </section>
+        <section class="leaderboard" id="leaderboard">
+            <h2>here be table</h2>
+        </section>
     </section>
-
-    <section class="game" id="game">
-        <h2>here be canvas</h2>
-    </section>
-
-    <section class="leaderboard" id="leaderboard">
-        <h2>here be table</h2>
-    </section>
+    <script src="node_modules/vue/dist/vue.min.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
