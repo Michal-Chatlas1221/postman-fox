@@ -28,11 +28,15 @@ const setup = () => {
     setInterval(() => {
         publicState.time ++;
         if (publicState.time % (publicState.gameTime + publicState.pauseTime) === publicState.gameTime) {
-            io.emit('start');
+            io.emit('start', {
+                state: publicState
+            });
         } else if(publicState.time % (publicState.gameTime + publicState.pauseTime) === 0) {
-            io.emit('stop');
+            io.emit('stop', {
+                state: publicState
+            });
         }
-        publicState.time = publicState.time % (gameTime+pauseTime);
+        publicState.time = publicState.time % (publicState.gameTime+publicState.pauseTime);
     }, 10000);
 };
 
