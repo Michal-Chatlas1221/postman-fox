@@ -9,10 +9,12 @@
             game.load.image('bullet', 'assets/games/asteroids/bullets.png');
             game.load.image('ship', 'assets/games/asteroids/ship.png');
             game.load.image('planet', 'assets/games/asteroids/planet.png');
+            game.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
         }
 
         var sprite;
         var planetSprite;
+        var targetPlanetSprite;
         var cursors;
 
         var bullet;
@@ -42,18 +44,22 @@
             bullets.setAll('anchor.y', 0.5);
 
             //  Our player ship
-            sprite = game.add.sprite(300, 300, 'ship');
+            sprite = game.add.sprite(400, 300, 'ship');
             sprite.anchor.set(0.5);
 
-            // sprite.body.immovable = true;
 
             //  NPM planet
-            planetSprite = game.add.sprite(20, 20, 'planet');
+            planetSprite = game.add.sprite(60, 300, 'planet');
             planetSprite.anchor.set(0.5);
+
+            //  Target planet
+            targetPlanetSprite = game.add.sprite(700, 300, 'targetPlanet');
+            targetPlanetSprite.anchor.set(0.5);
 
             //  and its physics settings
             game.physics.enable(sprite, Phaser.Physics.ARCADE);
             game.physics.enable(planetSprite, Phaser.Physics.ARCADE);
+            game.physics.enable(targetPlanetSprite, Phaser.Physics.ARCADE);
 
             sprite.body.collideWorldBounds = true;
             sprite.body.checkCollision.up = true;
@@ -63,6 +69,12 @@
             planetSprite.body.collideWorldBounds = true;
             planetSprite.body.checkCollision.up = true;
             planetSprite.body.checkCollision.down = true;
+            planetSprite.body.immovable = true;
+
+            targetPlanetSprite.body.collideWorldBounds = true;
+            targetPlanetSprite.body.checkCollision.up = true;
+            targetPlanetSprite.body.checkCollision.down = true;
+            targetPlanetSprite.body.immovable = true;
 
             sprite.body.drag.set(100);
             sprite.body.maxVelocity.set(200);
@@ -97,37 +109,22 @@
                 sprite.body.angularVelocity = 0;
             }
 
-            if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            {
-                fireBullet();
-            }
+            // if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+            // {
+            //     fireBullet();
+            // }
 
             screenWrap(sprite);
 
 
             game.physics.arcade.collide(sprite, planetSprite);
+            game.physics.arcade.collide(sprite, targetPlanetSprite);
 
             bullets.forEachExists(screenWrap, this);
 
         }
 
-        function fireBullet () {
 
-            if (game.time.now > bulletTime)
-            {
-                bullet = bullets.getFirstExists(false);
-
-                if (bullet)
-                {
-                    bullet.reset(sprite.body.x + 16, sprite.body.y + 16);
-                    bullet.lifespan = 2000;
-                    bullet.rotation = sprite.rotation;
-                    game.physics.arcade.velocityFromRotation(sprite.rotation, 400, bullet.body.velocity);
-                    bulletTime = game.time.now + 50;
-                }
-            }
-
-        }
 
         function screenWrap (sprite) {
 
