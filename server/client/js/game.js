@@ -45,12 +45,24 @@
             sprite = game.add.sprite(300, 300, 'ship');
             sprite.anchor.set(0.5);
 
+            // sprite.body.immovable = true;
+
             //  NPM planet
             planetSprite = game.add.sprite(20, 20, 'planet');
             planetSprite.anchor.set(0.5);
 
             //  and its physics settings
             game.physics.enable(sprite, Phaser.Physics.ARCADE);
+            game.physics.enable(planetSprite, Phaser.Physics.ARCADE);
+
+            sprite.body.collideWorldBounds = true;
+            sprite.body.checkCollision.up = true;
+            sprite.body.checkCollision.down = true;
+
+
+            planetSprite.body.collideWorldBounds = true;
+            planetSprite.body.checkCollision.up = true;
+            planetSprite.body.checkCollision.down = true;
 
             sprite.body.drag.set(100);
             sprite.body.maxVelocity.set(200);
@@ -92,6 +104,8 @@
 
             screenWrap(sprite);
 
+
+            game.physics.arcade.collide(sprite, planetSprite);
 
             bullets.forEachExists(screenWrap, this);
 
