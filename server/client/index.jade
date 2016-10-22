@@ -9,15 +9,15 @@ html(lang='en')
     link(rel='stylesheet', href='styles/style.css')
   body
     section#app
-      section#login.login(v-if="state === 'LOGIN'")
+      section#login.login(v-show="state === 'LOGIN'")
         h1.login__header Postmanfox
         form(v-on:submit.prevent='onLogin')
           input.login__input(type='text', name='username', v-model='username')
           button.login__button(type='submit') START GAME
         button(type='button') see instructions
-      section#game.game(v-if="state === 'GAME'")
+      section#game.game(v-show="state === 'GAME'")
         #game-wrapper  
-      section#leaderboard.leaderboard(v-if="state === 'LEADERBOARD'")
+      section#leaderboard.leaderboard(v-show="state === 'LEADERBOARD'")
         h2 here be table
     script(src='node_modules/vue/dist/vue.min.js')
     script(src='node_modules/socket.io-client/socket.io.js')

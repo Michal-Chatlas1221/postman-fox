@@ -3,4 +3,7 @@ body {
   color: #ffffff;
   font-family: "Montserrat", Helvetica Neue, Helvetica, Arial, sans-serif; }
 
+.hidden {
+  display: none; }
+
 /*# sourceMappingURL=style.css.map */

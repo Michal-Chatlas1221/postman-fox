@@ -10,7 +10,7 @@
 </head>
 <body>
 <section id="app">
-    <section id="login" v-if="state === 'LOGIN'" class="login">
+    <section id="login" v-show="state === 'LOGIN'" class="login">
         <h1 class="login__header">Postmanfox</h1>
         <form v-on:submit.prevent="onLogin">
             <input type="text" name="username" v-model="username" class="login__input">
@@ -18,10 +18,10 @@
         </form>
         <button type="button">see instructions</button>
     </section>
-    <section id="game" v-if="state === 'GAME'" class="game">
+    <section id="game" v-show="state === 'GAME'" class="game">
         <div id="game-wrapper"> </div>
     </section>
-    <section id="leaderboard" v-if="state === 'LEADERBOARD'" class="leaderboard">
+    <section id="leaderboard" v-show="state === 'LEADERBOARD'" class="leaderboard">
         <h2>here be table</h2>
     </section>
 </section>
