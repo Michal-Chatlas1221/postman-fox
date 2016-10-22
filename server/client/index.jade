@@ -16,6 +16,8 @@ html(lang='en')
           button.login__button(type='submit') START GAME
         button(type='button') see instructions
       section#game.game(v-show="state === 'GAME'")
+        div(v-show="loaded === false")
+          p loading
         #game-wrapper  
       section#leaderboard.leaderboard(v-show="state === 'LEADERBOARD'")
         h2 here be table

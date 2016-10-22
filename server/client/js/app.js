@@ -21,6 +21,7 @@
         el: '#app',
         data: {
             username: localStorage.getItem('username') || '',
+            loaded: false,
             onLogin: function () {
                 localStorage.setItem('username', app.username);
                 fetch('/users', {
@@ -34,6 +35,7 @@
                         return response.text()
                     }).then(function (response) {
                     // emmit join
+                    app.state = appStates.GAME;
                     socket.emit('join', {
                         id: JSON.parse(response)._id,
                         username: app.username
@@ -50,10 +52,11 @@
     });
 
     function startNewGame(data) {
+        app.loaded = true;
         console.log('start', data);
         app.state = appStates.GAME;
         if(!app.game) {
-            app.game = gameFactory();
+            app.game = gameFactory(onPackagePick, onTargetCollision);
             return;
         }
 
@@ -66,5 +69,13 @@
         app.state = appStates.LEADERBOARD;
         if(document.getElementsByTagName('canvas').length > 0) document.getElementsByTagName('canvas')[0].classList.add('hidden');
         // app.game = null;
+    }
+
+    function onPackagePick () {
+        console.log('PICKED PACKAGE');
+    }
+
+    function onTargetCollision () {
+        console.log('TARGET TOUCHED');
     }
 })();

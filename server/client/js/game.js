@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    window.gameFactory = function () {
+    window.gameFactory = function (onPackagePick, onTargetCollision) {
         var game  = new Phaser.Game(800, 600, Phaser.CANVAS, 'game-wrapper', { preload: preload, create: create, update: update, render: render });
 
         function preload() {
@@ -112,8 +112,8 @@
             screenWrap(sprite);
 
 
-            game.physics.arcade.collide(sprite, planetSprite);
-            game.physics.arcade.collide(sprite, targetPlanetSprite);
+            game.physics.arcade.collide(sprite, planetSprite, onPackagePick);
+            game.physics.arcade.collide(sprite, targetPlanetSprite, onTargetCollision);
 
             bullets.forEachExists(screenWrap, this);
 
