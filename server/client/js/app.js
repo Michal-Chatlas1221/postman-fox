@@ -3,11 +3,6 @@
 
     const appStates = {LOGIN: 'LOGIN', GAME: 'GAME', LEADERBOARD: 'LEADERBOARD'};
 
-    var socket = io('http://localhost:1923');
-
-    socket.on('connection', function (msg) {
-        console.log('msg', msg);
-    } );
 
     var app = new Vue({
         el: '#app',
@@ -21,9 +16,24 @@
                       'content-type': 'application/json'
                     },
                     body: JSON.stringify({name: app.username})
-                }).then(function (response) {
+                })
+                    .then(function(response) {
+                        return response.text()
+                    }).then(function (response) {
                     app.state = appStates.GAME;
                     app.game = gameFactory();
+                    console.log(JSON.parse(response)._id);
+
+                    var socket = io('http://localhost:1923');
+
+                    socket.on('connection', function (msg) {
+                        socket.emit('join', {
+                           id: JSON.parse(response)._id,
+                            username: app.username
+                        });
+                        console.log('msg', msg);
+                    });
+
                 });
             },
             state: appStates.LOGIN,
