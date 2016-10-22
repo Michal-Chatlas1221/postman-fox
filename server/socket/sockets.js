@@ -84,8 +84,8 @@ const setup = () => {
                 state: publicState,
                 eventSpecific: leaderBoard
             });
-            leaderBoard = [];
         } else if(publicState.time % (publicState.gameTime + publicState.pauseTime) === 0) {
+            leaderBoard = [];
             io.emit('start', {
                 state: publicState
             });
