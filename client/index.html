@@ -20,13 +20,19 @@
             <button type="button">see instructions</button>
         </section>
         <section class="game" id="game" v-if="state === 'GAME'">
-            <h2>here be canvas</h2>
+            <div id="game-wrapper">&nbsp;</div>
         </section>
         <section class="leaderboard" id="leaderboard"  v-if="state === 'LEADERBOARD'">
             <h2>here be table</h2>
         </section>
     </section>
     <script src="node_modules/vue/dist/vue.min.js"></script>
+    <script src="node_modules/phaser/dist/pixi.min.js"></script>
+    <script src="node_modules/phaser/dist/p2.min.js"></script>
+    <script src="node_modules/phaser/dist/creature.min.js"></script>
+    <script src="node_modules/phaser/dist/phaser-creature.min.js"></script>
+
     <script src="js/app.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>

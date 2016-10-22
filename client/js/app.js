@@ -9,9 +9,14 @@
             username: '',
             onLogin: function () {
                 app.state = appStates.GAME;
-                console.log(app);
+                app.game = gameFactory();
             },
-            state: appStates.LOGIN
+            state: appStates.LOGIN,
+            game: {},
+            onStateChange: function (state) {
+                if(Object.keys(appStates).indexOf(state) === -1) return;
+                app.state = state;
+            }
         }
     });
 
