@@ -63,7 +63,7 @@ const setup = () => {
             io.emit('stop', {
                 state: publicState
             });
-            io.emit('leaderBoard', {
+            io.emit('scores', {
                 state: publicState,
                 eventSpecific: leaderBoard
             });
