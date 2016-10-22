@@ -11,18 +11,18 @@
 </head>
 <body>
     <section id="app">
-        <section id="login" class="login">
+        <section id="login" class="login" v-if="state === 'LOGIN'">
             <h1 class="login__header">Postmanfox</h1>
-            <form action="">
-                <input class="login__input" type="text" name="username">
-                <button type="submit" class="login__button">{{message}}</button>
+            <form v-on:submit.prevent="onLogin">
+                <input class="login__input" type="text" name="username" v-model="username">
+                <button type="submit" class="login__button">START GAME</button>
             </form>
             <button type="button">see instructions</button>
         </section>
-        <section class="game" id="game">
+        <section class="game" id="game" v-if="state === 'GAME'">
             <h2>here be canvas</h2>
         </section>
-        <section class="leaderboard" id="leaderboard">
+        <section class="leaderboard" id="leaderboard"  v-if="state === 'LEADERBOARD'">
             <h2>here be table</h2>
         </section>
     </section>
