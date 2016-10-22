@@ -19,7 +19,17 @@ html(lang='en')
         p(v-show="!loaded") waiting for the next round to start
         #game-wrapper  
       section#leaderboard.leaderboard(v-show="state === 'LEADERBOARD'")
-        h2 here be table
+        h2 here is table right now
+        table
+            thead
+              tr
+                th name
+                th score
+            tbody
+              tr(v-for="user in leaderboard")
+                td {{user.name}}
+                td {{user.score}}
+
     script(src='node_modules/lodash/lodash.min.js')
     script(src='node_modules/vue/dist/vue.min.js')
     script(src='node_modules/socket.io-client/socket.io.js')

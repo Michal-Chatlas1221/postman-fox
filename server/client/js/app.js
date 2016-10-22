@@ -23,6 +23,7 @@
         data: {
             username: localStorage.getItem('username') || '',
             uid: '',
+            leaderboard: [],
             loaded: false,
             onLogin: function () {
                 localStorage.setItem('username', app.username);
@@ -43,6 +44,7 @@
                         id: app.uid,
                         username: app.username
                     });
+                    startNewGame();
                 });
             },
             state: appStates.LOGIN,
@@ -87,5 +89,6 @@
 
     function onScoresRecieve (data) {
         console.log('SCORE', data);
+        app.leaderboard = data.eventSpecific;
     }
 })();

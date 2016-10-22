@@ -11,7 +11,7 @@ const setup = () => {
         time: 0,
         gameTime: 10,
         pauseTime: 1,
-        timeUnit: 2
+        timeUnit: 5
     };
 
     let leaderBoard = [];
