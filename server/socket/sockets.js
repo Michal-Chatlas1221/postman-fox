@@ -14,6 +14,21 @@ const setup = () => {
             });
         });
     });
+
+    var time = 0;
+    var gameTime = 10;
+    var pauseTime = 1;
+    var timeUnit = 10;
+
+    setInterval(() => {
+        time ++;
+        if (time % (gameTime + pauseTime) === gameTime) {
+            io.emit('start');
+        } else if(time % (gameTime + pauseTime) === 0) {
+            io.emit('stop');
+        }
+        time = time % (gameTime+pauseTime);
+    }, 10000);
 };
 
 module.exports = setup;
