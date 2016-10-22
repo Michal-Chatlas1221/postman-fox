@@ -9,18 +9,12 @@
         console.log('msg', msg);
     } );
 
-    // io.on('connection', function(socket){
-    //     console.log('a user connected');
-    //     socket.on('disconnect', function(){
-    //         console.log('user disconnected');
-    //     });
-    // });
-
     var app = new Vue({
         el: '#app',
         data: {
-            username: '',
+            username: localStorage.getItem('username') || '',
             onLogin: function () {
+                localStorage.setItem('username', app.username);
                 fetch('/users', {
                     method: 'POST',
                     headers: {
