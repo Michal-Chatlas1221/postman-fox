@@ -40,6 +40,7 @@ const setup = () => {
             let leaderBoardIndex = leaderBoard.findIndex(e => e.id === data.id);
             if (leaderBoardIndex !== -1) {
                 leaderBoard[leaderBoardIndex].score += eventValues.find(e => e.name === data.name).value;
+                leaderBoard.sort((a, b) => b.score - a.score);
             } else {
                 let user = User.findOne({_id: data.id});
                 leaderBoard.push({
@@ -48,6 +49,7 @@ const setup = () => {
                     score: 0
                 });
                 leaderBoard[leaderBoard.length - 1].score += eventValues.find(e => e.name === data.name).value;
+                leaderBoard.sort((a, b) => b.score - a.score);
             }
 
             io.emit('scores', {
