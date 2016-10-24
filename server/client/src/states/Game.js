@@ -40,11 +40,13 @@ export default class Game extends Phaser.State {
     this.planetSprite.body.checkCollision.up = true;
     this.planetSprite.body.checkCollision.down = true;
     this.planetSprite.body.immovable = true;
+    this.planetSprite.body.setCircle(28);
 
     this.targetPlanetSprite.body.collideWorldBounds = true;
     this.targetPlanetSprite.body.checkCollision.up = true;
     this.targetPlanetSprite.body.checkCollision.down = true;
     this.targetPlanetSprite.body.immovable = true;
+    this.targetPlanetSprite.body.setCircle(28);
 
     this.sprite.body.drag.set(100);
     this.sprite.body.maxVelocity.set(200);

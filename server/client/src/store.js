@@ -1,7 +1,7 @@
 let store = {
     username: localStorage.getItem('username') || '',
     uid: '',
-    leaderboard: []
+    leaderBoard: []
 };
 
 function setUser(username, uid) {
@@ -18,12 +18,12 @@ function getUser() {
     };
 }
 
-function setLeaderBoard(leaederboard) {
-    store =  store = Object.assign({}, store, {leaederboard});
+function setLeaderBoard(leaderBoard) {
+    store = Object.assign({}, store, {leaderBoard});
 }
 
 function getLeaderBoard() {
-    return [...leaderboard];
+    return [...store.leaderBoard];
 }
 
 module.exports = {

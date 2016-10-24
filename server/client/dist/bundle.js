@@ -112588,7 +112588,7 @@
 	var store = {
 	    username: localStorage.getItem('username') || '',
 	    uid: '',
-	    leaderboard: []
+	    leaderBoard: []
 	};
 	
 	function setUser(username, uid) {
@@ -112605,12 +112605,12 @@
 	    };
 	}
 	
-	function setLeaderBoard(leaederboard) {
-	    store = store = Object.assign({}, store, { leaederboard: leaederboard });
+	function setLeaderBoard(leaderBoard) {
+	    store = Object.assign({}, store, { leaderBoard: leaderBoard });
 	}
 	
 	function getLeaderBoard() {
-	    return [].concat(_toConsumableArray(leaderboard));
+	    return [].concat(_toConsumableArray(store.leaderBoard));
 	}
 	
 	module.exports = {
@@ -120530,11 +120530,13 @@
 	      this.planetSprite.body.checkCollision.up = true;
 	      this.planetSprite.body.checkCollision.down = true;
 	      this.planetSprite.body.immovable = true;
+	      this.planetSprite.body.setCircle(28);
 	
 	      this.targetPlanetSprite.body.collideWorldBounds = true;
 	      this.targetPlanetSprite.body.checkCollision.up = true;
 	      this.targetPlanetSprite.body.checkCollision.down = true;
 	      this.targetPlanetSprite.body.immovable = true;
+	      this.targetPlanetSprite.body.setCircle(28);
 	
 	      this.sprite.body.drag.set(100);
 	      this.sprite.body.maxVelocity.set(200);
@@ -120619,6 +120621,8 @@
 	
 	var _phaser2 = _interopRequireDefault(_phaser);
 	
+	var _store = __webpack_require__(/*! ../store */ 310);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120627,26 +120631,50 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var Leaderboard = function (_Phaser$State) {
-	    _inherits(Leaderboard, _Phaser$State);
+	var LeaderBoard = function (_Phaser$State) {
+	    _inherits(LeaderBoard, _Phaser$State);
 	
-	    function Leaderboard() {
-	        _classCallCheck(this, Leaderboard);
+	    function LeaderBoard() {
+	        _classCallCheck(this, LeaderBoard);
 	
-	        return _possibleConstructorReturn(this, (Leaderboard.__proto__ || Object.getPrototypeOf(Leaderboard)).apply(this, arguments));
+	        return _possibleConstructorReturn(this, (LeaderBoard.__proto__ || Object.getPrototypeOf(LeaderBoard)).apply(this, arguments));
 	    }
 	
-	    _createClass(Leaderboard, [{
+	    _createClass(LeaderBoard, [{
+	        key: 'preload',
+	        value: function preload() {
+	            this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
+	            this.leaderBoard = (0, _store.getLeaderBoard)();
+	        }
+	    }, {
 	        key: 'create',
 	        value: function create() {
-	            console.log('Created leaderboard');
+	            var _this2 = this;
+	
+	            this.font = game.add.retroFont('knightHawks', 31, 25, _phaser2.default.RetroFont.TEXT_SET6, 10, 1, 1);
+	            console.log('asd', this.leaderBoard);
+	
+	            this.leaderBoard.map(function (e, i) {
+	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32, _this2.font);
+	                img.tint = Math.random() * 0xFFFFFF;
+	                img.anchor.set(0.5, 1);
+	                console.log(e, i);
+	            });
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            this.leaderBoard = (0, _store.getLeaderBoard)();
+	            this.font.text = this.leaderBoard.map(function (e) {
+	                return e.id + ' ' + e.name + ' ' + e.score;
+	            }).join('waaat');
 	        }
 	    }]);
 	
-	    return Leaderboard;
+	    return LeaderBoard;
 	}(_phaser2.default.State);
 	
-	exports.default = Leaderboard;
+	exports.default = LeaderBoard;
 
 /***/ }
 /******/ ]);
