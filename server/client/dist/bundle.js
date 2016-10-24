@@ -112328,7 +112328,7 @@
 	  _createClass(_class, [{
 	    key: 'init',
 	    value: function init() {
-	      this.stage.backgroundColor = '#ff0000';
+	      this.stage.backgroundColor = '#001743';
 	      this.fontsReady = false;
 	      this.fontsLoaded = this.fontsLoaded.bind(this);
 	    }
@@ -112523,7 +112523,7 @@
 	
 	        var _this = _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
 	
-	        _this.input = document.getElementById('username');
+	        _this.formInput = document.getElementById('username');
 	        _this.form = document.getElementById('form');
 	        _this.loginSection = document.getElementById('login');
 	
@@ -112534,17 +112534,16 @@
 	    }
 	
 	    _createClass(Login, [{
-	        key: 'init',
-	        value: function init() {
-	            this.inputValue = localStorage.getItem('username') || '';
-	            this.input.value = this.inputValue;
+	        key: 'create',
+	        value: function create() {
+	            this.formInput.setAttribute('value', window.localStorage.getItem('username') || '');
 	        }
 	    }, {
 	        key: 'onSubmit',
 	        value: function onSubmit() {
 	            var _this2 = this;
 	
-	            var username = this.input.value;
+	            var username = this.formInput.value;
 	
 	            fetch('/users', {
 	                method: 'POST',
@@ -120508,7 +120507,7 @@
 	      this.hasPackage = false;
 	      this.physics.startSystem(_phaser2.default.Physics.ARCADE);
 	
-	      this.add.tileSprite(0, 0, this.width, this.height, 'space');
+	      this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 	
 	      this.sprite = this.add.sprite(400, 300, 'ship');
 	      this.sprite.anchor.set(0.5);

@@ -5,20 +5,19 @@ import {joinRoom} from '../sockets';
 export default class Login extends Phaser.State {
     constructor() {
         super(...arguments);
-        this.input = document.getElementById('username');
+        this.formInput = document.getElementById('username');
         this.form = document.getElementById('form');
         this.loginSection = document.getElementById('login');
 
         this.form.addEventListener('submit', e => this.onSubmit(e), false);
     }
 
-    init() {
-        this.inputValue = localStorage.getItem('username') || '';
-        this.input.value = this.inputValue;
+    create() {
+        this.formInput.setAttribute('value', window.localStorage.getItem('username') || '');
     }
 
     onSubmit() {
-        const username = this.input.value;
+        const username = this.formInput.value;
 
         fetch('/users', {
             method: 'POST',

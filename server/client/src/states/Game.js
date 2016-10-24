@@ -17,7 +17,7 @@ export default class Game extends Phaser.State {
     this.hasPackage = false;
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.add.tileSprite(0, 0, this.width, this.height, 'space');
+    this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 
     this.sprite = this.add.sprite(400, 300, 'ship');
     this.sprite.anchor.set(0.5);
