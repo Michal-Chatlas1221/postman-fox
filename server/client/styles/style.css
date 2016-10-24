@@ -1,9 +1,32 @@
 body {
   background: #7bc0c0;
   color: #ffffff;
-  font-family: "Montserrat", Helvetica Neue, Helvetica, Arial, sans-serif; }
+  font-family: "Montserrat", Helvetica Neue, Helvetica, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center; }
 
 .hidden {
   display: none; }
+
+.login {
+  position: absolute;
+  font-size: 20px; }
+  .login__input {
+    padding: 10px;
+    min-height: 50px;
+    font-size: 20px;
+    border: 0; }
+  .login__button {
+    border: none;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: #d71b5a;
+    padding: 10px;
+    clear: both;
+    display: block;
+    font-size: 25px;
+    width: 100%; }
 
 /*# sourceMappingURL=style.css.map */

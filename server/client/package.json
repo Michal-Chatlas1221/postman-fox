@@ -7,13 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "http-server -p 8080",
     "watch": "scss --watch styles/scss/style.scss:styles/style.css",
-    "build": "scss styles/scss/style.scss styles/style.css"
+    "build": "scss styles/scss/style.scss styles/style.css",
+    "webpack": "webpack"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.9.0"
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "browser-sync": "^2.17.5",
+    "browser-sync-webpack-plugin": "^1.1.3",
+    "expose-loader": "^0.7.1",
+    "http-server": "^0.9.0",
+    "webfontloader": "^1.6.26",
+    "webpack": "^1.13.2"
   },
   "dependencies": {
     "lodash": "^4.16.4",

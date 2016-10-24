@@ -7,6 +7,35 @@ body {
   background: $light-blue;
   color: $white;
   font-family: $font-family;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }
 
 .hidden {display: none;}
+
+.login {
+  position: absolute;
+  font-size: 20px;
+
+
+  &__input {
+    padding: 10px;
+    min-height: 50px;
+    font-size: 20px;
+    border: 0;
+  }
+
+  &__button {
+    border: none;
+    color: $white;
+    text-transform: uppercase;
+    background: $pink;
+    padding: 10px;
+    clear:both;
+    display: block;
+    font-size: 25px;
+    width: 100%;
+  }
+}
