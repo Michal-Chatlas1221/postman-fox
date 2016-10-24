@@ -5,6 +5,7 @@ let store = {
 };
 
 function setUser(username, uid) {
+    localStorage.setItem('username', username);
     store = Object.assign({}, store, {
         username,
         uid

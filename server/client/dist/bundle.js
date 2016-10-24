@@ -112557,7 +112557,6 @@
 	                var uid = JSON.parse(response)._id;
 	                (0, _store.setUser)(username, uid);
 	                (0, _sockets.joinRoom)(username, uid);
-	                localStorage.setItem('username', username);
 	                _this2.updateGameState();
 	            });
 	        }
@@ -112592,6 +112591,7 @@
 	};
 	
 	function setUser(username, uid) {
+	    localStorage.setItem('username', username);
 	    store = Object.assign({}, store, {
 	        username: username,
 	        uid: uid

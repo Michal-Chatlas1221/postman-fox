@@ -31,7 +31,6 @@ export default class Login extends Phaser.State {
                 const uid = JSON.parse(response)._id;
                 setUser(username, uid);
                 joinRoom(username, uid);
-                localStorage.setItem('username', username);
                 this.updateGameState();
             });
     }
