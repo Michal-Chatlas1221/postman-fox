@@ -28,8 +28,6 @@
   "dependencies": {
     "lodash": "^4.16.4",
     "phaser": "^2.6.2",
-    "socketio": "^1.0.0",
-    "vue": "^2.0.3",
-    "vue-socket.io": "^1.0.2"
+    "socketio": "^1.0.0"
   }
 }
