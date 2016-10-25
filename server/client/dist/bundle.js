@@ -120629,11 +120629,8 @@
 	            var _this2 = this;
 	
 	            this.font = game.add.retroFont('knightHawks', 31, 25, _phaser2.default.RetroFont.TEXT_SET6, 10, 1, 1);
-	            console.log('asd', this.leaderBoard);
-	
 	            this.leaderBoard.map(function (e, i) {
 	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32 + 30, _this2.font);
-	                img.tint = Math.random() * 0xFFFFFF;
 	                img.anchor.set(0.5, 1);
 	            });
 	        }
