@@ -112348,7 +112348,7 @@
 	      this.load.image('loaderBg', './assets/images/loader-bg.png');
 	      this.load.image('loaderBar', './assets/images/loader-bar.png');
 	      this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
-	      this.game.load.image('space', 'assets/skies/deep-space.jpg');
+	      this.game.load.image('space', 'assets/games/asteroids/bg.png');
 	      this.game.load.image('bullet', 'assets/games/asteroids/bullets.png');
 	      this.game.load.image('ship', 'assets/games/asteroids/ship.png');
 	      this.game.load.image('planet', 'assets/games/asteroids/planet.png');
@@ -120487,7 +120487,7 @@
 	
 	var _store = __webpack_require__(/*! ../store */ 310);
 	
-	var _Fox = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../sprites/Fox\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 362);
 	
 	var _Fox2 = _interopRequireDefault(_Fox);
 	
@@ -120653,7 +120653,81 @@
 	exports.default = LeaderBoard;
 
 /***/ },
-/* 362 */,
+/* 362 */
+/*!****************************!*\
+  !*** ./src/sprites/Fox.js ***!
+  \****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _phaser = __webpack_require__(/*! phaser */ 303);
+	
+	var _phaser2 = _interopRequireDefault(_phaser);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Fox = function (_Phaser$Sprite) {
+	    _inherits(Fox, _Phaser$Sprite);
+	
+	    function Fox(_ref) {
+	        var game = _ref.game;
+	        var x = _ref.x;
+	        var y = _ref.y;
+	        var asset = _ref.asset;
+	
+	        _classCallCheck(this, Fox);
+	
+	        var _this = _possibleConstructorReturn(this, (Fox.__proto__ || Object.getPrototypeOf(Fox)).call(this, game, x, y, asset));
+	
+	        _this.game = game;
+	        _this.hasPackage = false;
+	        _this.anchor.set(0.5);
+	        _this.game.physics.enable(_this, _phaser2.default.Physics.ARCADE);
+	        _this.body.collideWorldBounds = true;
+	        _this.body.checkCollision.up = true;
+	        _this.body.checkCollision.down = true;
+	        _this.body.drag.set(100);
+	        _this.body.maxVelocity.set(200);
+	        return _this;
+	    }
+	
+	    _createClass(Fox, [{
+	        key: 'update',
+	        value: function update() {
+	            if (this.game.cursors.up.isDown) {
+	                this.game.physics.arcade.accelerationFromRotation(this.rotation, 200, this.body.acceleration);
+	            } else {
+	                this.body.acceleration.set(0);
+	            }
+	            if (this.game.cursors.left.isDown) {
+	                this.body.angularVelocity = -300;
+	            } else if (this.game.cursors.right.isDown) {
+	                this.body.angularVelocity = 300;
+	            } else {
+	                this.body.angularVelocity = 0;
+	            }
+	        }
+	    }]);
+	
+	    return Fox;
+	}(_phaser2.default.Sprite);
+	
+	exports.default = Fox;
+
+/***/ },
 /* 363 */
 /*!*******************************!*\
   !*** ./src/sprites/Planet.js ***!

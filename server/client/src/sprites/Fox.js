@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 
-export default Fox class extends Phaser.Sprite {
+export default class Fox extends Phaser.Sprite {
 
     constructor ({ game, x, y, asset }) {
         super(game, x, y, asset);
