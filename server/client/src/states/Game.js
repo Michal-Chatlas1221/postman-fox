@@ -39,7 +39,7 @@ export default class Game extends Phaser.State {
 
         for (var i = 0; i < 10; i++)
         {
-            var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'planet');
+            var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'asteroid');
 
             singleObstacle.anchor.set(0);
             this.game.physics.enable(singleObstacle, Phaser.Physics.ARCADE);
@@ -49,7 +49,7 @@ export default class Game extends Phaser.State {
             singleObstacle.body.checkCollision.down = true;
             singleObstacle.body.immovable = false;
             singleObstacle.body.bounce.set(1);
-            singleObstacle.body.setCircle(30);
+            singleObstacle.body.setCircle(15);
         }
 
         this.game.add.existing(this.fox);

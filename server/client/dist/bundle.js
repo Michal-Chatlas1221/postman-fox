@@ -112352,6 +112352,7 @@
 	      this.game.load.image('bullet', 'assets/games/asteroids/bullets.png');
 	      this.game.load.image('ship', 'assets/games/asteroids/ship.png');
 	      this.game.load.image('planet', 'assets/games/asteroids/planet.png');
+	      this.game.load.image('asteroid', 'assets/games/asteroids/asteroid.png');
 	      this.game.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
 	    }
 	  }, {
@@ -120548,7 +120549,7 @@
 	            this.planetGroup.enableBody = true;
 	
 	            for (var i = 0; i < 10; i++) {
-	                var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'planet');
+	                var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'asteroid');
 	
 	                singleObstacle.anchor.set(0);
 	                this.game.physics.enable(singleObstacle, _phaser2.default.Physics.ARCADE);
@@ -120558,7 +120559,7 @@
 	                singleObstacle.body.checkCollision.down = true;
 	                singleObstacle.body.immovable = false;
 	                singleObstacle.body.bounce.set(1);
-	                singleObstacle.body.setCircle(30);
+	                singleObstacle.body.setCircle(15);
 	            }
 	
 	            this.game.add.existing(this.fox);

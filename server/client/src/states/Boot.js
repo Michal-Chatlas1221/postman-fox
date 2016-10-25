@@ -27,6 +27,7 @@ export default class extends Phaser.State {
     this.game.load.image('bullet', 'assets/games/asteroids/bullets.png');
     this.game.load.image('ship', 'assets/games/asteroids/ship.png');
     this.game.load.image('planet', 'assets/games/asteroids/planet.png');
+    this.game.load.image('asteroid', 'assets/games/asteroids/asteroid.png');
     this.game.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
   }
 
