@@ -12,7 +12,7 @@ export default class LeaderBoard extends Phaser.State {
         console.log('asd', this.leaderBoard);
 
         this.leaderBoard.map((e, i) => {
-            var img = this.game.add.image(this.game.world.centerX, 6 + i * 32, this.font);
+            var img = this.game.add.image(this.game.world.centerX, 6 + i * 32 + 20, this.font);
             img.tint = Math.random() * 0xFFFFFF;
             img.anchor.set(0.5, 1);
             console.log(e, i);
