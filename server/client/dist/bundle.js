@@ -112348,6 +112348,11 @@
 	      this.load.image('loaderBg', './assets/images/loader-bg.png');
 	      this.load.image('loaderBar', './assets/images/loader-bar.png');
 	      this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
+	      this.game.load.image('space', 'assets/skies/deep-space.jpg');
+	      this.game.load.image('bullet', 'assets/games/asteroids/bullets.png');
+	      this.game.load.image('ship', 'assets/games/asteroids/ship.png');
+	      this.game.load.image('planet', 'assets/games/asteroids/planet.png');
+	      this.game.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
 	    }
 	  }, {
 	    key: 'render',
@@ -112444,9 +112449,7 @@
 	      (0, _utils.centerGameObjects)([this.loaderBg, this.loaderBar]);
 	
 	      this.load.setPreloadSprite(this.loaderBar);
-	      //
-	      // load your assets
-	      //
+	
 	      this.load.image('mushroom', 'assets/images/mushroom2.png');
 	    }
 	  }, {
@@ -120482,6 +120485,10 @@
 	
 	var _store = __webpack_require__(/*! ../store */ 310);
 	
+	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 362);
+	
+	var _Fox2 = _interopRequireDefault(_Fox);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120520,8 +120527,14 @@
 	
 	      this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 	
-	      this.sprite = this.add.sprite(400, 300, 'ship');
-	      this.sprite.anchor.set(0.5);
+	      this.fox = new _Fox2.default({
+	        game: this.game,
+	        x: this.game.world.centerX,
+	        y: this.game.world.centerY,
+	        asset: 'ship'
+	      });
+	
+	      this.game.add.existing(this.fox);
 	
 	      this.planetSprite = this.add.sprite(60, 300, 'planet');
 	      this.planetSprite.anchor.set(0.5);
@@ -120529,13 +120542,9 @@
 	      this.targetPlanetSprite = this.add.sprite(700, 300, 'targetPlanet');
 	      this.targetPlanetSprite.anchor.set(0.5);
 	
-	      this.physics.enable(this.sprite, _phaser2.default.Physics.ARCADE);
+	      this.physics.enable(this.fox, _phaser2.default.Physics.ARCADE);
 	      this.physics.enable(this.planetSprite, _phaser2.default.Physics.ARCADE);
 	      this.physics.enable(this.targetPlanetSprite, _phaser2.default.Physics.ARCADE);
-	
-	      this.sprite.body.collideWorldBounds = true;
-	      this.sprite.body.checkCollision.up = true;
-	      this.sprite.body.checkCollision.down = true;
 	
 	      this.planetSprite.body.collideWorldBounds = true;
 	      this.planetSprite.body.checkCollision.up = true;
@@ -120548,9 +120557,6 @@
 	      this.targetPlanetSprite.body.checkCollision.down = true;
 	      this.targetPlanetSprite.body.immovable = true;
 	      this.targetPlanetSprite.body.setCircle(28);
-	
-	      this.sprite.body.drag.set(100);
-	      this.sprite.body.maxVelocity.set(200);
 	
 	      //  Game input
 	      this.cursors = this.input.keyboard.createCursorKeys();
@@ -120567,26 +120573,26 @@
 	      var _this2 = this;
 	
 	      if (this.cursors.up.isDown) {
-	        this.physics.arcade.accelerationFromRotation(this.sprite.rotation, 200, this.sprite.body.acceleration);
+	        this.physics.arcade.accelerationFromRotation(this.fox.rotation, 200, this.fox.body.acceleration);
 	      } else {
-	        this.sprite.body.acceleration.set(0);
+	        this.fox.body.acceleration.set(0);
 	      }
 	      if (this.cursors.left.isDown) {
-	        this.sprite.body.angularVelocity = -300;
+	        this.fox.body.angularVelocity = -300;
 	      } else if (this.cursors.right.isDown) {
-	        this.sprite.body.angularVelocity = 300;
+	        this.fox.body.angularVelocity = 300;
 	      } else {
-	        this.sprite.body.angularVelocity = 0;
+	        this.fox.body.angularVelocity = 0;
 	      }
 	
-	      this.screenWrap(this.sprite);
+	      this.screenWrap(this.fox);
 	
-	      this.physics.arcade.collide(this.sprite, this.planetSprite, function () {
+	      this.physics.arcade.collide(this.fox, this.planetSprite, function () {
 	        if (!_this2.hasPackage) (0, _sockets.onPackagePick)();
 	        _this2.hasPackage = true;
 	      });
 	
-	      this.physics.arcade.collide(this.sprite, this.targetPlanetSprite, function () {
+	      this.physics.arcade.collide(this.fox, this.targetPlanetSprite, function () {
 	        if (_this2.hasPackage) (0, _sockets.onTargetCollision)();
 	        _this2.hasPackage = false;
 	      });
@@ -120597,16 +120603,15 @@
 	  }, {
 	    key: 'screenWrap',
 	    value: function screenWrap(sprite) {
-	
 	      if (sprite.x < 0) {
-	        sprite.x = this.width;
-	      } else if (sprite.x > this.width) {
+	        sprite.x = this.game.width;
+	      } else if (sprite.x > this.game.width) {
 	        sprite.x = 0;
 	      }
 	
 	      if (sprite.y < 0) {
-	        sprite.y = this.height;
-	      } else if (sprite.y > this.height) {
+	        sprite.y = this.game.height;
+	      } else if (sprite.y > this.game.height) {
 	        sprite.y = 0;
 	      }
 	    }
@@ -120691,6 +120696,69 @@
 	}(_phaser2.default.State);
 	
 	exports.default = LeaderBoard;
+
+/***/ },
+/* 362 */
+/*!****************************!*\
+  !*** ./src/sprites/Fox.js ***!
+  \****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _phaser = __webpack_require__(/*! phaser */ 303);
+	
+	var _phaser2 = _interopRequireDefault(_phaser);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var _class = function (_Phaser$Sprite) {
+	    _inherits(_class, _Phaser$Sprite);
+	
+	    function _class(_ref) {
+	        var game = _ref.game;
+	        var x = _ref.x;
+	        var y = _ref.y;
+	        var asset = _ref.asset;
+	
+	        _classCallCheck(this, _class);
+	
+	        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, game, x, y, asset));
+	
+	        _this.game = game;
+	        _this.anchor.setTo(0.5);
+	        return _this;
+	    }
+	
+	    _createClass(_class, [{
+	        key: 'create',
+	        value: function create() {
+	            this.fox.anchor.set(0.5);
+	            this.game.physics.enable(this, _phaser2.default.Physics.ARCADE);
+	            this.body.collideWorldBounds = true;
+	            this.body.checkCollision.up = true;
+	            this.body.checkCollision.down = true;
+	            this.body.drag.set(100);
+	            this.body.maxVelocity.set(200);
+	        }
+	    }]);
+	
+	    return _class;
+	}(_phaser2.default.Sprite);
+	
+	exports.default = _class;
 
 /***/ }
 /******/ ]);

@@ -4,6 +4,7 @@ import Phaser from 'phaser'
 // import {setResponsiveWidth} from '../utils'
 import {onTargetCollision, onPackagePick} from '../sockets';
 import {getCurrentUserScore} from '../store';
+import Fox from '../sprites/Fox'
 
 export default class Game extends Phaser.State {
   preload() {
@@ -20,8 +21,15 @@ export default class Game extends Phaser.State {
 
     this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 
-    this.sprite = this.add.sprite(400, 300, 'ship');
-    this.sprite.anchor.set(0.5);
+
+    this.fox = new Fox({
+      game: this.game,
+      x: this.game.world.centerX,
+      y: this.game.world.centerY,
+      asset: 'ship'
+    });
+
+    this.game.add.existing(this.fox);
 
     this.planetSprite = this.add.sprite(60, 300, 'planet');
     this.planetSprite.anchor.set(0.5);
@@ -29,13 +37,9 @@ export default class Game extends Phaser.State {
     this.targetPlanetSprite = this.add.sprite(700, 300, 'targetPlanet');
     this.targetPlanetSprite.anchor.set(0.5);
 
-    this.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+    this.physics.enable(this.fox, Phaser.Physics.ARCADE);
     this.physics.enable(this.planetSprite, Phaser.Physics.ARCADE);
     this.physics.enable(this.targetPlanetSprite, Phaser.Physics.ARCADE);
-
-    this.sprite.body.collideWorldBounds = true;
-    this.sprite.body.checkCollision.up = true;
-    this.sprite.body.checkCollision.down = true;
 
     this.planetSprite.body.collideWorldBounds = true;
     this.planetSprite.body.checkCollision.up = true;
@@ -49,9 +53,6 @@ export default class Game extends Phaser.State {
     this.targetPlanetSprite.body.immovable = true;
     this.targetPlanetSprite.body.setCircle(28);
 
-    this.sprite.body.drag.set(100);
-    this.sprite.body.maxVelocity.set(200);
-
     //  Game input
     this.cursors = this.input.keyboard.createCursorKeys();
     this.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
@@ -64,29 +65,29 @@ export default class Game extends Phaser.State {
 
   update() {
     if (this.cursors.up.isDown) {
-      this.physics.arcade.accelerationFromRotation(this.sprite.rotation, 200, this.sprite.body.acceleration);
+      this.physics.arcade.accelerationFromRotation(this.fox.rotation, 200, this.fox.body.acceleration);
     }
     else {
-      this.sprite.body.acceleration.set(0);
+      this.fox.body.acceleration.set(0);
     }
     if (this.cursors.left.isDown) {
-      this.sprite.body.angularVelocity = -300;
+      this.fox.body.angularVelocity = -300;
     }
     else if (this.cursors.right.isDown) {
-      this.sprite.body.angularVelocity = 300;
+      this.fox.body.angularVelocity = 300;
     }
     else {
-      this.sprite.body.angularVelocity = 0;
+      this.fox.body.angularVelocity = 0;
     }
 
-    this.screenWrap(this.sprite);
+    this.screenWrap(this.fox);
 
-    this.physics.arcade.collide(this.sprite, this.planetSprite, () => {
+    this.physics.arcade.collide(this.fox, this.planetSprite, () => {
       if (!this.hasPackage) onPackagePick();
       this.hasPackage = true;
     });
 
-    this.physics.arcade.collide(this.sprite, this.targetPlanetSprite, () => {
+    this.physics.arcade.collide(this.fox, this.targetPlanetSprite, () => {
       if (this.hasPackage) onTargetCollision();
       this.hasPackage = false;
     });
@@ -96,18 +97,17 @@ export default class Game extends Phaser.State {
   }
 
    screenWrap(sprite) {
-
     if (sprite.x < 0) {
-      sprite.x = this.width;
+      sprite.x = this.game.width;
     }
-    else if (sprite.x > this.width) {
+    else if (sprite.x > this.game.width) {
       sprite.x = 0;
     }
 
     if (sprite.y < 0) {
-      sprite.y = this.height;
+      sprite.y = this.game.height;
     }
-    else if (sprite.y > this.height) {
+    else if (sprite.y > this.game.height) {
       sprite.y = 0;
     }
   }
