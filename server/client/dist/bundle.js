@@ -112676,8 +112676,10 @@
 	}
 	
 	function startNewGame() {
-	    console.log('start');
-	    if (_store2.default.getUser().uid) window.game.state.start('Game');
+	    if (_store2.default.getUser().uid) {
+	        window.game.state.start('Game');
+	        _store2.default.setLeaderBoard([]);
+	    }
 	}
 	function stopGame() {
 	    console.log('stop');
@@ -120472,7 +120474,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -120489,6 +120491,10 @@
 	
 	var _Fox2 = _interopRequireDefault(_Fox);
 	
+	var _Planet = __webpack_require__(/*! ../sprites/Planet */ 363);
+	
+	var _Planet2 = _interopRequireDefault(_Planet);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120502,125 +120508,63 @@
 	
 	
 	var Game = function (_Phaser$State) {
-	  _inherits(Game, _Phaser$State);
+	    _inherits(Game, _Phaser$State);
 	
-	  function Game() {
-	    _classCallCheck(this, Game);
+	    function Game() {
+	        _classCallCheck(this, Game);
 	
-	    return _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).apply(this, arguments));
-	  }
-	
-	  _createClass(Game, [{
-	    key: 'preload',
-	    value: function preload() {
-	      this.load.image('space', 'assets/skies/deep-space.jpg');
-	      this.load.image('bullet', 'assets/games/asteroids/bullets.png');
-	      this.load.image('ship', 'assets/games/asteroids/ship.png');
-	      this.load.image('planet', 'assets/games/asteroids/planet.png');
-	      this.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
+	        return _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).apply(this, arguments));
 	    }
-	  }, {
-	    key: 'create',
-	    value: function create() {
-	      this.hasPackage = false;
-	      this.physics.startSystem(_phaser2.default.Physics.ARCADE);
 	
-	      this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
+	    _createClass(Game, [{
+	        key: 'create',
+	        value: function create() {
+	            this.physics.startSystem(_phaser2.default.Physics.ARCADE);
+	            this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 	
-	      this.fox = new _Fox2.default({
-	        game: this.game,
-	        x: this.game.world.centerX,
-	        y: this.game.world.centerY,
-	        asset: 'ship'
-	      });
+	            this.fox = new _Fox2.default({
+	                game: this,
+	                x: this.game.world.centerX,
+	                y: this.game.world.centerY,
+	                asset: 'ship'
+	            });
 	
-	      this.game.add.existing(this.fox);
+	            this.sourcePlanet = new _Planet2.default({ game: this, x: 60, y: 300, type: 'SOURCE' });
+	            this.targetPlanet = new _Planet2.default({ game: this, x: 700, y: 300, type: 'TARGET' });
 	
-	      this.planetSprite = this.add.sprite(60, 300, 'planet');
-	      this.planetSprite.anchor.set(0.5);
+	            this.game.add.existing(this.fox);
+	            this.game.add.existing(this.sourcePlanet);
+	            this.game.add.existing(this.targetPlanet);
 	
-	      this.targetPlanetSprite = this.add.sprite(700, 300, 'targetPlanet');
-	      this.targetPlanetSprite.anchor.set(0.5);
+	            this.physics.enable(this.targetPlanet, _phaser2.default.Physics.ARCADE);
 	
-	      this.physics.enable(this.fox, _phaser2.default.Physics.ARCADE);
-	      this.physics.enable(this.planetSprite, _phaser2.default.Physics.ARCADE);
-	      this.physics.enable(this.targetPlanetSprite, _phaser2.default.Physics.ARCADE);
+	            this.cursors = this.input.keyboard.createCursorKeys();
+	            this.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
 	
-	      this.planetSprite.body.collideWorldBounds = true;
-	      this.planetSprite.body.checkCollision.up = true;
-	      this.planetSprite.body.checkCollision.down = true;
-	      this.planetSprite.body.immovable = true;
-	      this.planetSprite.body.setCircle(28);
+	            this.currentScore = this.game.add.text(10, 10, '', { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	            this.currentScore.text = (0, _store.getCurrentUserScore)();
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            var _this2 = this;
 	
-	      this.targetPlanetSprite.body.collideWorldBounds = true;
-	      this.targetPlanetSprite.body.checkCollision.up = true;
-	      this.targetPlanetSprite.body.checkCollision.down = true;
-	      this.targetPlanetSprite.body.immovable = true;
-	      this.targetPlanetSprite.body.setCircle(28);
+	            this.physics.arcade.collide(this.fox, this.sourcePlanet, function () {
+	                if (!_this2.fox.hasPackage) (0, _sockets.onPackagePick)();
+	                _this2.fox.hasPackage = true;
+	            });
 	
-	      //  Game input
-	      this.cursors = this.input.keyboard.createCursorKeys();
-	      this.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
+	            this.physics.arcade.collide(this.fox, this.targetPlanet, function () {
+	                if (_this2.fox.hasPackage) (0, _sockets.onTargetCollision)();
+	                _this2.fox.hasPackage = false;
+	            });
 	
-	      var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+	            //todo: debounce maybe?
+	            this.currentScore.text = (0, _store.getCurrentUserScore)();
+	        }
+	    }]);
 	
-	      this.currentScore = this.game.add.text(0, 0, '', style);
-	      this.currentScore.text = (0, _store.getCurrentUserScore)();
-	    }
-	  }, {
-	    key: 'update',
-	    value: function update() {
-	      var _this2 = this;
-	
-	      if (this.cursors.up.isDown) {
-	        this.physics.arcade.accelerationFromRotation(this.fox.rotation, 200, this.fox.body.acceleration);
-	      } else {
-	        this.fox.body.acceleration.set(0);
-	      }
-	      if (this.cursors.left.isDown) {
-	        this.fox.body.angularVelocity = -300;
-	      } else if (this.cursors.right.isDown) {
-	        this.fox.body.angularVelocity = 300;
-	      } else {
-	        this.fox.body.angularVelocity = 0;
-	      }
-	
-	      this.screenWrap(this.fox);
-	
-	      this.physics.arcade.collide(this.fox, this.planetSprite, function () {
-	        if (!_this2.hasPackage) (0, _sockets.onPackagePick)();
-	        _this2.hasPackage = true;
-	      });
-	
-	      this.physics.arcade.collide(this.fox, this.targetPlanetSprite, function () {
-	        if (_this2.hasPackage) (0, _sockets.onTargetCollision)();
-	        _this2.hasPackage = false;
-	      });
-	
-	      //todo: debounce maybe?
-	      this.currentScore.text = (0, _store.getCurrentUserScore)();
-	    }
-	  }, {
-	    key: 'screenWrap',
-	    value: function screenWrap(sprite) {
-	      if (sprite.x < 0) {
-	        sprite.x = this.game.width;
-	      } else if (sprite.x > this.game.width) {
-	        sprite.x = 0;
-	      }
-	
-	      if (sprite.y < 0) {
-	        sprite.y = this.game.height;
-	      } else if (sprite.y > this.game.height) {
-	        sprite.y = 0;
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {}
-	  }]);
-	
-	  return Game;
+	    return Game;
 	}(_phaser2.default.State);
 	
 	exports.default = Game;
@@ -120738,20 +120682,32 @@
 	        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, game, x, y, asset));
 	
 	        _this.game = game;
-	        _this.anchor.setTo(0.5);
+	        _this.hasPackage = false;
+	        _this.anchor.set(0.5);
+	        _this.game.physics.enable(_this, _phaser2.default.Physics.ARCADE);
+	        _this.body.collideWorldBounds = true;
+	        _this.body.checkCollision.up = true;
+	        _this.body.checkCollision.down = true;
+	        _this.body.drag.set(100);
+	        _this.body.maxVelocity.set(200);
 	        return _this;
 	    }
 	
 	    _createClass(_class, [{
-	        key: 'create',
-	        value: function create() {
-	            this.fox.anchor.set(0.5);
-	            this.game.physics.enable(this, _phaser2.default.Physics.ARCADE);
-	            this.body.collideWorldBounds = true;
-	            this.body.checkCollision.up = true;
-	            this.body.checkCollision.down = true;
-	            this.body.drag.set(100);
-	            this.body.maxVelocity.set(200);
+	        key: 'update',
+	        value: function update() {
+	            if (this.game.cursors.up.isDown) {
+	                this.game.physics.arcade.accelerationFromRotation(this.rotation, 200, this.body.acceleration);
+	            } else {
+	                this.body.acceleration.set(0);
+	            }
+	            if (this.game.cursors.left.isDown) {
+	                this.body.angularVelocity = -300;
+	            } else if (this.game.cursors.right.isDown) {
+	                this.body.angularVelocity = 300;
+	            } else {
+	                this.body.angularVelocity = 0;
+	            }
 	        }
 	    }]);
 	
@@ -120759,6 +120715,64 @@
 	}(_phaser2.default.Sprite);
 	
 	exports.default = _class;
+
+/***/ },
+/* 363 */
+/*!*******************************!*\
+  !*** ./src/sprites/Planet.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _phaser = __webpack_require__(/*! phaser */ 303);
+	
+	var _phaser2 = _interopRequireDefault(_phaser);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Planet = function (_Phaser$Sprite) {
+	    _inherits(Planet, _Phaser$Sprite);
+	
+	    function Planet(_ref) {
+	        var game = _ref.game;
+	        var x = _ref.x;
+	        var y = _ref.y;
+	        var type = _ref.type;
+	
+	        _classCallCheck(this, Planet);
+	
+	        var asset = type === 'SOURCE' ? 'planet' : 'targetPlanet';
+	
+	        var _this = _possibleConstructorReturn(this, (Planet.__proto__ || Object.getPrototypeOf(Planet)).call(this, game, x, y, asset));
+	
+	        _this.game = game;
+	        _this.anchor.set(0.5);
+	        _this.game.physics.enable(_this, _phaser2.default.Physics.ARCADE);
+	
+	        _this.body.collideWorldBounds = true;
+	        _this.body.checkCollision.up = true;
+	        _this.body.checkCollision.down = true;
+	        _this.body.immovable = true;
+	        _this.body.setCircle(28);
+	
+	        return _this;
+	    }
+	
+	    return Planet;
+	}(_phaser2.default.Sprite);
+	
+	exports.default = Planet;
 
 /***/ }
 /******/ ]);

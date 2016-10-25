@@ -26,8 +26,10 @@ function onScoresReceive(data) {
 }
 
 function startNewGame() {
-    console.log('start');
-    if(store.getUser().uid) window.game.state.start('Game');
+    if(store.getUser().uid) {
+        window.game.state.start('Game');
+        store.setLeaderBoard([]);
+    }
 }
 function stopGame() {
     console.log('stop');

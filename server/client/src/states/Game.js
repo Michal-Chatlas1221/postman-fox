@@ -4,114 +4,50 @@ import Phaser from 'phaser'
 // import {setResponsiveWidth} from '../utils'
 import {onTargetCollision, onPackagePick} from '../sockets';
 import {getCurrentUserScore} from '../store';
-import Fox from '../sprites/Fox'
+import Fox from '../sprites/Fox';
+import Planet from '../sprites/Planet';
 
 export default class Game extends Phaser.State {
-  preload() {
-    this.load.image('space', 'assets/skies/deep-space.jpg');
-    this.load.image('bullet', 'assets/games/asteroids/bullets.png');
-    this.load.image('ship', 'assets/games/asteroids/ship.png');
-    this.load.image('planet', 'assets/games/asteroids/planet.png');
-    this.load.image('targetPlanet', 'assets/games/asteroids/targetPlanet.png');
-  }
+    create() {
+        this.physics.startSystem(Phaser.Physics.ARCADE);
+        this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 
-  create() {
-    this.hasPackage = false;
-    this.physics.startSystem(Phaser.Physics.ARCADE);
+        this.fox = new Fox({
+            game: this,
+            x: this.game.world.centerX,
+            y: this.game.world.centerY,
+            asset: 'ship'
+        });
 
-    this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
+        this.sourcePlanet = new Planet({game: this, x: 60, y: 300, type: 'SOURCE'});
+        this.targetPlanet = new Planet({game: this, x: 700, y: 300, type: 'TARGET'});
 
+        this.game.add.existing(this.fox);
+        this.game.add.existing(this.sourcePlanet);
+        this.game.add.existing(this.targetPlanet);
 
-    this.fox = new Fox({
-      game: this.game,
-      x: this.game.world.centerX,
-      y: this.game.world.centerY,
-      asset: 'ship'
-    });
+        this.physics.enable(this.targetPlanet, Phaser.Physics.ARCADE);
 
-    this.game.add.existing(this.fox);
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
-    this.planetSprite = this.add.sprite(60, 300, 'planet');
-    this.planetSprite.anchor.set(0.5);
-
-    this.targetPlanetSprite = this.add.sprite(700, 300, 'targetPlanet');
-    this.targetPlanetSprite.anchor.set(0.5);
-
-    this.physics.enable(this.fox, Phaser.Physics.ARCADE);
-    this.physics.enable(this.planetSprite, Phaser.Physics.ARCADE);
-    this.physics.enable(this.targetPlanetSprite, Phaser.Physics.ARCADE);
-
-    this.planetSprite.body.collideWorldBounds = true;
-    this.planetSprite.body.checkCollision.up = true;
-    this.planetSprite.body.checkCollision.down = true;
-    this.planetSprite.body.immovable = true;
-    this.planetSprite.body.setCircle(28);
-
-    this.targetPlanetSprite.body.collideWorldBounds = true;
-    this.targetPlanetSprite.body.checkCollision.up = true;
-    this.targetPlanetSprite.body.checkCollision.down = true;
-    this.targetPlanetSprite.body.immovable = true;
-    this.targetPlanetSprite.body.setCircle(28);
-
-    //  Game input
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
-
-    var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
-
-    this.currentScore = this.game.add.text(0, 0, '', style);
-    this.currentScore.text = getCurrentUserScore();
-  }
-
-  update() {
-    if (this.cursors.up.isDown) {
-      this.physics.arcade.accelerationFromRotation(this.fox.rotation, 200, this.fox.body.acceleration);
-    }
-    else {
-      this.fox.body.acceleration.set(0);
-    }
-    if (this.cursors.left.isDown) {
-      this.fox.body.angularVelocity = -300;
-    }
-    else if (this.cursors.right.isDown) {
-      this.fox.body.angularVelocity = 300;
-    }
-    else {
-      this.fox.body.angularVelocity = 0;
+        this.currentScore = this.game.add.text(10, 10, '',
+            {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+        this.currentScore.text = getCurrentUserScore();
     }
 
-    this.screenWrap(this.fox);
+    update() {
+        this.physics.arcade.collide(this.fox, this.sourcePlanet, () => {
+            if (!this.fox.hasPackage) onPackagePick();
+            this.fox.hasPackage = true;
+        });
 
-    this.physics.arcade.collide(this.fox, this.planetSprite, () => {
-      if (!this.hasPackage) onPackagePick();
-      this.hasPackage = true;
-    });
+        this.physics.arcade.collide(this.fox, this.targetPlanet, () => {
+            if (this.fox.hasPackage) onTargetCollision();
+            this.fox.hasPackage = false;
+        });
 
-    this.physics.arcade.collide(this.fox, this.targetPlanetSprite, () => {
-      if (this.hasPackage) onTargetCollision();
-      this.hasPackage = false;
-    });
-
-    //todo: debounce maybe?
-    this.currentScore.text = getCurrentUserScore();
-  }
-
-   screenWrap(sprite) {
-    if (sprite.x < 0) {
-      sprite.x = this.game.width;
+        //todo: debounce maybe?
+        this.currentScore.text = getCurrentUserScore();
     }
-    else if (sprite.x > this.game.width) {
-      sprite.x = 0;
-    }
-
-    if (sprite.y < 0) {
-      sprite.y = this.game.height;
-    }
-    else if (sprite.y > this.game.height) {
-      sprite.y = 0;
-    }
-  }
-
-  render() {
-  }
 }
