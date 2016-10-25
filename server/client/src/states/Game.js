@@ -33,6 +33,25 @@ export default class Game extends Phaser.State {
             type: 'TARGET'
         });
 
+        this.planetGroup = this.game.add.physicsGroup();
+        this.planetGroup.physicsBodyType = Phaser.Physics.ARCADE;
+        this.planetGroup.enableBody = true;
+
+        for (var i = 0; i < 10; i++)
+        {
+            var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'planet');
+
+            singleObstacle.anchor.set(0);
+            this.game.physics.enable(singleObstacle, Phaser.Physics.ARCADE);
+
+            singleObstacle.body.collideWorldBounds = true;
+            singleObstacle.body.checkCollision.up = true;
+            singleObstacle.body.checkCollision.down = true;
+            singleObstacle.body.immovable = false;
+            singleObstacle.body.bounce.set(1);
+            singleObstacle.body.setCircle(30);
+        }
+
         this.game.add.existing(this.fox);
         this.game.add.existing(this.sourcePlanet);
         this.game.add.existing(this.targetPlanet);
@@ -61,5 +80,14 @@ export default class Game extends Phaser.State {
 
         //todo: debounce maybe?
         this.currentScore.text = getCurrentUserScore();
+
+        if (this.game.physics.arcade.collide(this.fox, this.planetGroup, c => {
+                console.log('collision event', c);
+            }, e => {
+                console.log('some process handler it is', e)
+            }, this))
+        {
+            console.log('boom');
+        }
     }
 }
