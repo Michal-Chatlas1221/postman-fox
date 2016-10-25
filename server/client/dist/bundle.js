@@ -120558,7 +120558,8 @@
 	
 	      var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
 	
-	      this.currentScore = this.game.add.text(0, 0, "phaser 2.4 text bounds", style);
+	      this.currentScore = this.game.add.text(0, 0, '', style);
+	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	    }
 	  }, {
 	    key: 'update',
@@ -120590,6 +120591,7 @@
 	        _this2.hasPackage = false;
 	      });
 	
+	      //todo: debounce maybe?
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	    }
 	  }, {

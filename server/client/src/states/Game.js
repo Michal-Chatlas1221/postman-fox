@@ -58,8 +58,8 @@ export default class Game extends Phaser.State {
 
     var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
 
-    this.currentScore = this.game.add.text(0, 0, "phaser 2.4 text bounds", style);
-
+    this.currentScore = this.game.add.text(0, 0, '', style);
+    this.currentScore.text = getCurrentUserScore();
   }
 
   update() {
@@ -91,6 +91,7 @@ export default class Game extends Phaser.State {
       this.hasPackage = false;
     });
 
+    //todo: debounce maybe?
     this.currentScore.text = getCurrentUserScore();
   }
 
