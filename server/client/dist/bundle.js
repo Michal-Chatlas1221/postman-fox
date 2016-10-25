@@ -120666,7 +120666,7 @@
 	        value: function update() {
 	            this.leaderBoard = (0, _store.getLeaderBoard)();
 	            this.font.text = this.leaderBoard.map(function (e) {
-	                return e.id + ' ' + e.name + ' ' + e.score;
+	                return e.name + ' ' + e.score;
 	            }).join('waaat');
 	        }
 	    }]);

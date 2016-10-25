@@ -21,6 +21,6 @@ export default class LeaderBoard extends Phaser.State {
 
     update() {
         this.leaderBoard = getLeaderBoard();
-        this.font.text = this.leaderBoard.map(e => `${e.id} ${e.name} ${e.score}`).join('waaat');
+        this.font.text = this.leaderBoard.map(e => `${e.name} ${e.score}`).join('waaat');
     }
 }
