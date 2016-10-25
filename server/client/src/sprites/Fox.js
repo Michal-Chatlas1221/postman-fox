@@ -7,13 +7,14 @@ export default class Fox extends Phaser.Sprite {
 
         this.game = game;
         this.hasPackage = false;
-        this.anchor.set(0.5);
+        this.anchor.set(0.5, 0.5);
         this.game.physics.enable(this, Phaser.Physics.ARCADE);
         this.body.collideWorldBounds = true;
         this.body.checkCollision.up = true;
         this.body.checkCollision.down = true;
         this.body.drag.set(100);
         this.body.maxVelocity.set(200);
+        this.body.bounce.set(1);
     }
     
     update() {

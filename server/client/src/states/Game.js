@@ -45,6 +45,7 @@ export default class Game extends Phaser.State {
         this.currentScore = this.game.add.text(10, 10, '',
             {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
         this.currentScore.text = getCurrentUserScore();
+
     }
 
     update() {

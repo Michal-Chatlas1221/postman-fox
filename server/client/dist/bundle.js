@@ -120694,13 +120694,14 @@
 	
 	        _this.game = game;
 	        _this.hasPackage = false;
-	        _this.anchor.set(0.5);
+	        _this.anchor.set(0.5, 0.5);
 	        _this.game.physics.enable(_this, _phaser2.default.Physics.ARCADE);
 	        _this.body.collideWorldBounds = true;
 	        _this.body.checkCollision.up = true;
 	        _this.body.checkCollision.down = true;
 	        _this.body.drag.set(100);
 	        _this.body.maxVelocity.set(200);
+	        _this.body.bounce.set(1);
 	        return _this;
 	    }
 	
@@ -120768,15 +120769,15 @@
 	        var _this = _possibleConstructorReturn(this, (Planet.__proto__ || Object.getPrototypeOf(Planet)).call(this, game, x, y, asset));
 	
 	        _this.game = game;
-	        _this.anchor.set(0.5);
+	        _this.anchor.set(0);
 	        _this.game.physics.enable(_this, _phaser2.default.Physics.ARCADE);
 	
 	        _this.body.collideWorldBounds = true;
 	        _this.body.checkCollision.up = true;
 	        _this.body.checkCollision.down = true;
 	        _this.body.immovable = true;
-	        _this.body.setCircle(28);
-	
+	        _this.body.bounce.set(1);
+	        _this.body.setCircle(30);
 	        return _this;
 	    }
 	
