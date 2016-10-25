@@ -19,8 +19,19 @@ export default class Game extends Phaser.State {
             asset: 'ship'
         });
 
-        this.sourcePlanet = new Planet({game: this, x: 60, y: 300, type: 'SOURCE'});
-        this.targetPlanet = new Planet({game: this, x: 700, y: 300, type: 'TARGET'});
+        this.sourcePlanet = new Planet({
+            game: this,
+            x: Math.random() * 150 + 60,
+            y: (Math.random() * 1000) % (this.game.height - 100) + 50,
+            type: 'SOURCE'
+        });
+
+        this.targetPlanet = new Planet({
+            game: this,
+            x: (this.game.width - Math.random() * 150) - 60,
+            y: (Math.random() * 1000) % (this.game.height - 100) + 50,
+            type: 'TARGET'
+        });
 
         this.game.add.existing(this.fox);
         this.game.add.existing(this.sourcePlanet);
