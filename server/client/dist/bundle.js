@@ -112347,6 +112347,7 @@
 	
 	      this.load.image('loaderBg', './assets/images/loader-bg.png');
 	      this.load.image('loaderBar', './assets/images/loader-bar.png');
+	      this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
 	    }
 	  }, {
 	    key: 'render',
@@ -112613,11 +112614,19 @@
 	    return [].concat(_toConsumableArray(store.leaderBoard));
 	}
 	
+	function getCurrentUserScore() {
+	    var found = store.leaderBoard.find(function (e) {
+	        return e.id === store.uid;
+	    });
+	    return found ? found.score : '0';
+	}
+	
 	module.exports = {
 	    setUser: setUser,
 	    getUser: getUser,
 	    setLeaderBoard: setLeaderBoard,
-	    getLeaderBoard: getLeaderBoard
+	    getLeaderBoard: getLeaderBoard,
+	    getCurrentUserScore: getCurrentUserScore
 	};
 
 /***/ },
@@ -120471,6 +120480,8 @@
 	
 	var _sockets = __webpack_require__(/*! ../sockets */ 311);
 	
+	var _store = __webpack_require__(/*! ../store */ 310);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120544,6 +120555,10 @@
 	      //  Game input
 	      this.cursors = this.input.keyboard.createCursorKeys();
 	      this.input.keyboard.addKeyCapture([_phaser2.default.Keyboard.SPACEBAR]);
+	
+	      var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+	
+	      this.currentScore = this.game.add.text(0, 0, "phaser 2.4 text bounds", style);
 	    }
 	  }, {
 	    key: 'update',
@@ -120555,7 +120570,6 @@
 	      } else {
 	        this.sprite.body.acceleration.set(0);
 	      }
-	
 	      if (this.cursors.left.isDown) {
 	        this.sprite.body.angularVelocity = -300;
 	      } else if (this.cursors.right.isDown) {
@@ -120575,6 +120589,8 @@
 	        if (_this2.hasPackage) (0, _sockets.onTargetCollision)();
 	        _this2.hasPackage = false;
 	      });
+	
+	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	    }
 	  }, {
 	    key: 'screenWrap',
@@ -120643,7 +120659,6 @@
 	    _createClass(LeaderBoard, [{
 	        key: 'preload',
 	        value: function preload() {
-	            this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
 	            this.leaderBoard = (0, _store.getLeaderBoard)();
 	        }
 	    }, {
@@ -120658,7 +120673,6 @@
 	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32 + 30, _this2.font);
 	                img.tint = Math.random() * 0xFFFFFF;
 	                img.anchor.set(0.5, 1);
-	                console.log(e, i);
 	            });
 	        }
 	    }, {
@@ -120667,7 +120681,7 @@
 	            this.leaderBoard = (0, _store.getLeaderBoard)();
 	            this.font.text = this.leaderBoard.map(function (e) {
 	                return e.name + ' ' + e.score;
-	            }).join('waaat');
+	            }).join('\n\b');
 	        }
 	    }]);
 	

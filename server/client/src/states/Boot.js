@@ -22,6 +22,7 @@ export default class extends Phaser.State {
 
     this.load.image('loaderBg', './assets/images/loader-bg.png');
     this.load.image('loaderBar', './assets/images/loader-bar.png');
+    this.game.load.image('knightHawks', 'assets/fonts/retroFonts/KNIGHT3.png');
   }
 
   render () {

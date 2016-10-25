@@ -27,9 +27,15 @@ function getLeaderBoard() {
     return [...store.leaderBoard];
 }
 
+function getCurrentUserScore() {
+    const found = store.leaderBoard.find(e => e.id === store.uid);
+    return found ? found.score : '0';
+}
+
 module.exports = {
     setUser,
     getUser,
     setLeaderBoard,
-    getLeaderBoard
+    getLeaderBoard,
+    getCurrentUserScore
 };

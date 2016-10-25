@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 // import Mushroom from '../sprites/Mushroom'
 // import {setResponsiveWidth} from '../utils'
 import {onTargetCollision, onPackagePick} from '../sockets';
+import {getCurrentUserScore} from '../store';
 
 export default class Game extends Phaser.State {
   preload() {
@@ -55,6 +56,10 @@ export default class Game extends Phaser.State {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
+    var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
+
+    this.currentScore = this.game.add.text(0, 0, "phaser 2.4 text bounds", style);
+
   }
 
   update() {
@@ -64,7 +69,6 @@ export default class Game extends Phaser.State {
     else {
       this.sprite.body.acceleration.set(0);
     }
-
     if (this.cursors.left.isDown) {
       this.sprite.body.angularVelocity = -300;
     }
@@ -86,6 +90,8 @@ export default class Game extends Phaser.State {
       if (this.hasPackage) onTargetCollision();
       this.hasPackage = false;
     });
+
+    this.currentScore.text = getCurrentUserScore();
   }
 
    screenWrap(sprite) {
