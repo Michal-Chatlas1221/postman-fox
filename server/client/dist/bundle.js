@@ -120655,7 +120655,7 @@
 	            console.log('asd', this.leaderBoard);
 	
 	            this.leaderBoard.map(function (e, i) {
-	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32 + 20, _this2.font);
+	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32 + 30, _this2.font);
 	                img.tint = Math.random() * 0xFFFFFF;
 	                img.anchor.set(0.5, 1);
 	                console.log(e, i);
