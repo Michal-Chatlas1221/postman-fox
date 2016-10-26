@@ -120783,7 +120783,7 @@
 	    }, {
 	        key: 'create',
 	        value: function create() {
-	            this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, (0, _store.getLeaderBoard)(), { font: "regular 20px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	            this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, (0, _store.getLeaderBoard)(), { font: "regular 24px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
 	            this.currentScore.anchor.set(0.5);
 	        }
 	    }, {
