@@ -81,13 +81,9 @@ export default class Game extends Phaser.State {
         //todo: debounce maybe?
         this.currentScore.text = getCurrentUserScore();
 
-        if (this.game.physics.arcade.collide(this.fox, this.planetGroup, c => {
-                console.log('collision event', c);
-            }, e => {
-                console.log('some process handler it is', e)
-            }, this))
+        if (this.game.physics.arcade.collide(this.fox, this.planetGroup, c => {}, e => {}, this))
         {
-            console.log('boom');
+            //todo: drop the package and loose points
         }
     }
 }

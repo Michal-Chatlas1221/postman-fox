@@ -9100,7 +9100,7 @@
 	
 	var _Game2 = _interopRequireDefault(_Game);
 	
-	var _Leaderboard = __webpack_require__(/*! ./states/Leaderboard */ 361);
+	var _Leaderboard = __webpack_require__(/*! ./states/Leaderboard */ 363);
 	
 	var _Leaderboard2 = _interopRequireDefault(_Leaderboard);
 	
@@ -120488,11 +120488,11 @@
 	
 	var _store = __webpack_require__(/*! ../store */ 310);
 	
-	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 362);
+	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 361);
 	
 	var _Fox2 = _interopRequireDefault(_Fox);
 	
-	var _Planet = __webpack_require__(/*! ../sprites/Planet */ 363);
+	var _Planet = __webpack_require__(/*! ../sprites/Planet */ 362);
 	
 	var _Planet2 = _interopRequireDefault(_Planet);
 	
@@ -120592,12 +120592,8 @@
 	            //todo: debounce maybe?
 	            this.currentScore.text = (0, _store.getCurrentUserScore)();
 	
-	            if (this.game.physics.arcade.collide(this.fox, this.planetGroup, function (c) {
-	                console.log('collision event', c);
-	            }, function (e) {
-	                console.log('some process handler it is', e);
-	            }, this)) {
-	                console.log('boom');
+	            if (this.game.physics.arcade.collide(this.fox, this.planetGroup, function (c) {}, function (e) {}, this)) {
+	                //todo: drop the package and loose points
 	            }
 	        }
 	    }]);
@@ -120609,75 +120605,6 @@
 
 /***/ },
 /* 361 */
-/*!***********************************!*\
-  !*** ./src/states/Leaderboard.js ***!
-  \***********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _phaser = __webpack_require__(/*! phaser */ 303);
-	
-	var _phaser2 = _interopRequireDefault(_phaser);
-	
-	var _store = __webpack_require__(/*! ../store */ 310);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LeaderBoard = function (_Phaser$State) {
-	    _inherits(LeaderBoard, _Phaser$State);
-	
-	    function LeaderBoard() {
-	        _classCallCheck(this, LeaderBoard);
-	
-	        return _possibleConstructorReturn(this, (LeaderBoard.__proto__ || Object.getPrototypeOf(LeaderBoard)).apply(this, arguments));
-	    }
-	
-	    _createClass(LeaderBoard, [{
-	        key: 'preload',
-	        value: function preload() {
-	            this.leaderBoard = (0, _store.getLeaderBoard)();
-	        }
-	    }, {
-	        key: 'create',
-	        value: function create() {
-	            var _this2 = this;
-	
-	            this.font = game.add.retroFont('knightHawks', 31, 25, _phaser2.default.RetroFont.TEXT_SET6, 10, 1, 1);
-	            this.leaderBoard.map(function (e, i) {
-	                var img = _this2.game.add.image(_this2.game.world.centerX, 6 + i * 32 + 30, _this2.font);
-	                img.anchor.set(0.5, 1);
-	            });
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
-	            this.leaderBoard = (0, _store.getLeaderBoard)();
-	            this.font.text = this.leaderBoard.map(function (e) {
-	                return e.name + ' ' + e.score;
-	            }).join('\n\b');
-	        }
-	    }]);
-	
-	    return LeaderBoard;
-	}(_phaser2.default.State);
-	
-	exports.default = LeaderBoard;
-
-/***/ },
-/* 362 */
 /*!****************************!*\
   !*** ./src/sprites/Fox.js ***!
   \****************************/
@@ -120753,7 +120680,7 @@
 	exports.default = Fox;
 
 /***/ },
-/* 363 */
+/* 362 */
 /*!*******************************!*\
   !*** ./src/sprites/Planet.js ***!
   \*******************************/
@@ -120809,6 +120736,70 @@
 	}(_phaser2.default.Sprite);
 	
 	exports.default = Planet;
+
+/***/ },
+/* 363 */
+/*!***********************************!*\
+  !*** ./src/states/Leaderboard.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _phaser = __webpack_require__(/*! phaser */ 303);
+	
+	var _phaser2 = _interopRequireDefault(_phaser);
+	
+	var _store = __webpack_require__(/*! ../store */ 310);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LeaderBoard = function (_Phaser$State) {
+	    _inherits(LeaderBoard, _Phaser$State);
+	
+	    function LeaderBoard() {
+	        _classCallCheck(this, LeaderBoard);
+	
+	        return _possibleConstructorReturn(this, (LeaderBoard.__proto__ || Object.getPrototypeOf(LeaderBoard)).apply(this, arguments));
+	    }
+	
+	    _createClass(LeaderBoard, [{
+	        key: 'preload',
+	        value: function preload() {
+	            this.leaderBoard = (0, _store.getLeaderBoard)();
+	        }
+	    }, {
+	        key: 'create',
+	        value: function create() {
+	            this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, (0, _store.getLeaderBoard)(), { font: "regular 20px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	            this.currentScore.anchor.set(0.5);
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            this.leaderBoard = (0, _store.getLeaderBoard)();
+	            this.currentScore.text = this.leaderBoard.map(function (e) {
+	                return e.name + ' : ' + e.score;
+	            }).join('\n');
+	        }
+	    }]);
+	
+	    return LeaderBoard;
+	}(_phaser2.default.State);
+	
+	exports.default = LeaderBoard;
 
 /***/ }
 /******/ ]);
