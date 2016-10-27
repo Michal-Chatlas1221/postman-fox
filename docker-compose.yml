@@ -1,8 +1,10 @@
 mongodb:
+  container_name: postman_mongo
   image: mongo
   ports:
     - 27017:27017
 server:
+ container_name: postman_node
  image: node
  volumes:
    - ./server:/app/server
