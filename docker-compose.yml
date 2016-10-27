@@ -10,8 +10,10 @@ server:
    - ./server:/app/server
  working_dir: /app/server
  command: npm run start
+ environment:
+   PORT: 3030
  ports:
-   - 3030:3000
+   - 3030:3030
    - 1923:1923
  links:
    - mongodb
