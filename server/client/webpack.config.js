@@ -7,7 +7,7 @@ var phaserModule = path.join(__dirname, '/node_modules/phaser/')
 var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
 var pixi = path.join(phaserModule, 'build/custom/pixi.js')
 var p2 = path.join(phaserModule, 'build/custom/p2.js')
-
+var ProgressBarPlugin = require('progress-bar-webpack-plugin');
 var definePlugin = new webpack.DefinePlugin({
     __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
 })
@@ -29,6 +29,7 @@ module.exports = {
     watch: true,
     plugins: [
         definePlugin,
+        new ProgressBarPlugin(),
         new BrowserSyncPlugin({
             host: process.env.IP || 'localhost',
             port: process.env.PORT || 3000,
