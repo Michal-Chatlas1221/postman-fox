@@ -9,9 +9,9 @@ const setup = () => {
 
     let publicState = {
         time: 0,
-        gameTime: 10,
+        gameTime: 15,
         pauseTime: 1,
-        timeUnit: 5
+        timeUnit: 1
     };
 
     let leaderBoard = [];
@@ -26,7 +26,7 @@ const setup = () => {
     io.on('connection', function(socket){
 
         socket.on('join', (data) => {
-            console.log('asd', data);
+            console.log('[event: join]', data);
             socket.broadcast.emit('connected', {
                 state: publicState,
                 eventSpecific: {
@@ -90,6 +90,10 @@ const setup = () => {
                 state: publicState
             });
         }
+      io.emit('time', {
+        time: publicState.time,
+        timeFrame: publicState.gameTime
+      });
         publicState.time = publicState.time % (publicState.gameTime+publicState.pauseTime);
     }, 1000 * publicState.timeUnit);
 };
