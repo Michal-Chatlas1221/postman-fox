@@ -3,7 +3,7 @@ const setup = () => {
     const eventValues = [
         {name: 'delivered', value: 100},
         {name: 'crashed', value: -10},
-        {name: 'damaged', value: 50},
+        {name: 'damaged', value: -50},
         {name: 'picked', value: 5}
     ];
 

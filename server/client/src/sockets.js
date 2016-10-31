@@ -14,11 +14,15 @@ function onPackagePick() {
 }
 
 function onTargetCollision() {
-  socket.emit('gameEvent', {id: store.getUser().uid, name: 'delivered'});
+  socket.emit('gameEvent', {id: store.getUser().uid, name: 'damaged'});
 }
 
 function onObstacleCollision() {
   socket.emit('gameEvent', {id: store.getUser().uid, name: 'crashed'});
+}
+
+function onDelivery() {
+  socket.emit('gameEvent', {id: store.getUser().uid, name: 'delivered'});
 }
 
 function onScoresReceive(data) {
@@ -55,5 +59,6 @@ module.exports = {
   joinRoom,
   stopGame,
   setTime,
-  onObstacleCollision
+  onObstacleCollision,
+  onDelivery
 };

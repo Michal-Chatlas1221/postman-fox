@@ -112667,11 +112667,15 @@
 	}
 	
 	function onTargetCollision() {
-	  socket.emit('gameEvent', { id: _store2.default.getUser().uid, name: 'delivered' });
+	  socket.emit('gameEvent', { id: _store2.default.getUser().uid, name: 'damaged' });
 	}
 	
 	function onObstacleCollision() {
 	  socket.emit('gameEvent', { id: _store2.default.getUser().uid, name: 'crashed' });
+	}
+	
+	function onDelivery() {
+	  socket.emit('gameEvent', { id: _store2.default.getUser().uid, name: 'delivered' });
 	}
 	
 	function onScoresReceive(data) {
@@ -112708,7 +112712,8 @@
 	  joinRoom: joinRoom,
 	  stopGame: stopGame,
 	  setTime: setTime,
-	  onObstacleCollision: onObstacleCollision
+	  onObstacleCollision: onObstacleCollision,
+	  onDelivery: onDelivery
 	};
 
 /***/ },
@@ -120557,14 +120562,18 @@
 	    key: 'create',
 	    value: function create() {
 	
+	      this.foxInTargetZone = function (planet, fox) {
+	        return Math.sqrt(Math.pow(planet.position.x + 30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
+	      };
+	
 	      this.markPlanet = function (planet, toRemove) {
 	        toRemove.graphics = toRemove.game.add.graphics(0, 0);
 	        toRemove.graphics.lineStyle(2, 0xFF0000, 1);
-	        toRemove.graphics.drawCircle(toRemove.x + 30, toRemove.y + 30, 130);
+	        toRemove.graphics.drawCircle(toRemove.x + 30, toRemove.y + 30, 200);
 	
 	        planet.graphics = planet.game.add.graphics(0, 0);
 	        planet.graphics.lineStyle(2, 0x00FF00, 1);
-	        planet.graphics.drawCircle(planet.x + 30, planet.y + 30, 130);
+	        planet.graphics.drawCircle(planet.x + 30, planet.y + 30, 200);
 	      };
 	
 	      this.physics.startSystem(_phaser2.default.Physics.ARCADE);
@@ -120641,16 +120650,25 @@
 	      });
 	
 	      this.physics.arcade.collide(this.fox, this.targetPlanet, function () {
-	        if (_this2.fox.hasPackage) (0, _sockets.onTargetCollision)();
-	        _this2.fox.hasPackage = false;
-	        _this2.markPlanet(_this2.sourcePlanet, _this2.targetPlanet);
+	        if (_this2.fox.hasPackage) {
+	          _this2.fox.hasPackage = false;
+	          _this2.markPlanet(_this2.sourcePlanet, _this2.targetPlanet);
+	          (0, _sockets.onTargetCollision)();
+	        }
 	      });
 	
 	      if (this.game.physics.arcade.collide(this.fox, this.planetGroup, function (c) {}, function (e) {}, this)) {
-	        //todo: drop the package and loose points
 	        this.markPlanet(this.sourcePlanet, this.targetPlanet);
 	        if (this.fox.hasPackage) (0, _sockets.onObstacleCollision)();
 	        this.fox.hasPackage = false;
+	      }
+	
+	      if (_phaser2.default.Point.equals(this.fox.body.velocity, new _phaser2.default.Point(0, 0))) {
+	        if (this.foxInTargetZone(this.targetPlanet, this.fox) && this.fox.hasPackage) {
+	          this.fox.hasPackage = false;
+	          this.markPlanet(this.sourcePlanet, this.targetPlanet);
+	          (0, _sockets.onDelivery)();
+	        }
 	      }
 	
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();

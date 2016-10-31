@@ -2,7 +2,7 @@
 import Phaser from 'phaser'
 // import Mushroom from '../sprites/Mushroom'
 // import {setResponsiveWidth} from '../utils'
-import {onTargetCollision, onPackagePick, stopGame, onObstacleCollision} from '../sockets';
+import {onTargetCollision, onPackagePick, stopGame, onObstacleCollision, onDelivery} from '../sockets';
 import {getCurrentUserScore} from '../store';
 import {getTimer} from '../timer';
 import Fox from '../sprites/Fox';
@@ -12,14 +12,18 @@ export default class Game extends Phaser.State {
 
   create() {
 
+    this.foxInTargetZone = (planet, fox) => {
+      return Math.sqrt(Math.pow(planet.position.x +30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
+    };
+
     this.markPlanet = (planet, toRemove) => {
       toRemove.graphics = toRemove.game.add.graphics(0, 0);
       toRemove.graphics.lineStyle(2, 0xFF0000, 1);
-      toRemove.graphics.drawCircle(toRemove.x+30, toRemove.y+30, 130);
+      toRemove.graphics.drawCircle(toRemove.x+30, toRemove.y+30, 200);
 
       planet.graphics = planet.game.add.graphics(0, 0);
       planet.graphics.lineStyle(2, 0x00FF00, 1);
-      planet.graphics.drawCircle(planet.x+30, planet.y+30, 130);
+      planet.graphics.drawCircle(planet.x+30, planet.y+30, 200);
     };
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -96,18 +100,27 @@ export default class Game extends Phaser.State {
     });
 
     this.physics.arcade.collide(this.fox, this.targetPlanet, () => {
-      if (this.fox.hasPackage) onTargetCollision();
-      this.fox.hasPackage = false;
-      this.markPlanet(this.sourcePlanet, this.targetPlanet)
+      if (this.fox.hasPackage)  {
+        this.fox.hasPackage = false;
+        this.markPlanet(this.sourcePlanet, this.targetPlanet)
+        onTargetCollision();
+      }
     });
 
     if (this.game.physics.arcade.collide(this.fox, this.planetGroup, c => {
       }, e => {
       }, this)) {
-      //todo: drop the package and loose points
       this.markPlanet(this.sourcePlanet, this.targetPlanet);
       if (this.fox.hasPackage) onObstacleCollision();
       this.fox.hasPackage = false;
+    }
+
+    if (Phaser.Point.equals(this.fox.body.velocity,new Phaser.Point(0,0) ) ){
+      if (this.foxInTargetZone(this.targetPlanet, this.fox) && this.fox.hasPackage) {
+        this.fox.hasPackage = false;
+        this.markPlanet(this.sourcePlanet, this.targetPlanet);
+        onDelivery();
+      }
     }
 
     this.currentScore.text = getCurrentUserScore();
