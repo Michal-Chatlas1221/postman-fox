@@ -86,7 +86,6 @@ export default class Game extends Phaser.State {
       this.currentTimer.text = "Time left: " + getTimer();
     }, this);
 
-    console.log("state 27");
   }
 
   update() {

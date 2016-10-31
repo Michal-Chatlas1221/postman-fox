@@ -3,10 +3,6 @@ import store from './store';
 import {getTimer, timerStart, timerDecrease, setTimer} from './timer';
 const socket = io(':1923');
 
-socket.on('connect', function () {
-  console.log('CONNECTED TO SOCKET');
-});
-
 socket.on('start', startNewGame);
 socket.on('stop', stopGame);
 socket.on('time', setTime);
@@ -26,7 +22,6 @@ function onObstacleCollision() {
 }
 
 function onScoresReceive(data) {
-  console.log('SCORE', data.eventSpecific);
   store.setLeaderBoard(data.eventSpecific);
 }
 
@@ -37,7 +32,6 @@ function startNewGame() {
   }
 }
 function stopGame() {
-  console.log('stop');
   if (store.getUser().uid) {
     window.game.state.start('Leaderboard');
   }

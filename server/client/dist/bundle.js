@@ -112656,10 +112656,6 @@
 	
 	var socket = (0, _socket2.default)(':1923');
 	
-	socket.on('connect', function () {
-	  console.log('CONNECTED TO SOCKET');
-	});
-	
 	socket.on('start', startNewGame);
 	socket.on('stop', stopGame);
 	socket.on('time', setTime);
@@ -112679,7 +112675,6 @@
 	}
 	
 	function onScoresReceive(data) {
-	  console.log('SCORE', data.eventSpecific);
 	  _store2.default.setLeaderBoard(data.eventSpecific);
 	}
 	
@@ -112690,7 +112685,6 @@
 	  }
 	}
 	function stopGame() {
-	  console.log('stop');
 	  if (_store2.default.getUser().uid) {
 	    window.game.state.start('Leaderboard');
 	  }
@@ -120494,7 +120488,6 @@
 	
 	function setTimer(event) {
 	  timer = event.timeFrame - event.time;
-	  console.log("socket: " + timer);
 	}
 	
 	function getTimer() {
@@ -120635,8 +120628,6 @@
 	      game.time.events.repeat(_phaser2.default.Timer.SECOND * 1, 100, function () {
 	        this.currentTimer.text = "Time left: " + (0, _timer.getTimer)();
 	      }, this);
-	
-	      console.log("state 27");
 	    }
 	  }, {
 	    key: 'update',
