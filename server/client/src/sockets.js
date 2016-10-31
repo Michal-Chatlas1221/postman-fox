@@ -21,6 +21,10 @@ function onTargetCollision() {
   socket.emit('gameEvent', {id: store.getUser().uid, name: 'delivered'});
 }
 
+function onObstacleCollision() {
+  socket.emit('gameEvent', {id: store.getUser().uid, name: 'crashed'});
+}
+
 function onScoresReceive(data) {
   console.log('SCORE', data.eventSpecific);
   store.setLeaderBoard(data.eventSpecific);
@@ -56,5 +60,6 @@ module.exports = {
   onTargetCollision,
   joinRoom,
   stopGame,
-  setTime
+  setTime,
+  onObstacleCollision
 };

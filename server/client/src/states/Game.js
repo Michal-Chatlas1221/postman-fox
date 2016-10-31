@@ -2,14 +2,26 @@
 import Phaser from 'phaser'
 // import Mushroom from '../sprites/Mushroom'
 // import {setResponsiveWidth} from '../utils'
-import {onTargetCollision, onPackagePick, stopGame} from '../sockets';
+import {onTargetCollision, onPackagePick, stopGame, onObstacleCollision} from '../sockets';
 import {getCurrentUserScore} from '../store';
 import {getTimer} from '../timer';
 import Fox from '../sprites/Fox';
 import Planet from '../sprites/Planet';
 
 export default class Game extends Phaser.State {
+
   create() {
+
+    this.markPlanet = (planet, toRemove) => {
+      toRemove.graphics = toRemove.game.add.graphics(0, 0);
+      toRemove.graphics.lineStyle(2, 0xFF0000, 1);
+      toRemove.graphics.drawCircle(toRemove.x+30, toRemove.y+30, 130);
+
+      planet.graphics = planet.game.add.graphics(0, 0);
+      planet.graphics.lineStyle(2, 0x00FF00, 1);
+      planet.graphics.drawCircle(planet.x+30, planet.y+30, 130);
+    };
+
     this.physics.startSystem(Phaser.Physics.ARCADE);
     this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 
@@ -24,7 +36,7 @@ export default class Game extends Phaser.State {
       game: this,
       x: Math.random() * 150 + 60,
       y: (Math.random() * 1000) % (this.game.height - 100) + 50,
-      type: 'SOURCE'
+      type: 'SOURCE',
     });
 
     this.targetPlanet = new Planet({
@@ -33,6 +45,8 @@ export default class Game extends Phaser.State {
       y: (Math.random() * 1000) % (this.game.height - 100) + 50,
       type: 'TARGET'
     });
+
+    this.markPlanet(this.sourcePlanet, this.targetPlanet);
 
     this.planetGroup = this.game.add.physicsGroup();
     this.planetGroup.physicsBodyType = Phaser.Physics.ARCADE;
@@ -79,17 +93,22 @@ export default class Game extends Phaser.State {
     this.physics.arcade.collide(this.fox, this.sourcePlanet, () => {
       if (!this.fox.hasPackage) onPackagePick();
       this.fox.hasPackage = true;
+      this.markPlanet(this.targetPlanet, this.sourcePlanet);
     });
 
     this.physics.arcade.collide(this.fox, this.targetPlanet, () => {
       if (this.fox.hasPackage) onTargetCollision();
       this.fox.hasPackage = false;
+      this.markPlanet(this.sourcePlanet, this.targetPlanet)
     });
 
     if (this.game.physics.arcade.collide(this.fox, this.planetGroup, c => {
       }, e => {
       }, this)) {
       //todo: drop the package and loose points
+      this.markPlanet(this.sourcePlanet, this.targetPlanet);
+      if (this.fox.hasPackage) onObstacleCollision();
+      this.fox.hasPackage = false;
     }
 
     this.currentScore.text = getCurrentUserScore();

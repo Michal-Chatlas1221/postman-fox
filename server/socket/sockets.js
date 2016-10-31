@@ -9,8 +9,8 @@ const setup = () => {
 
     let publicState = {
         time: 0,
-        gameTime: 15,
-        pauseTime: 1,
+        gameTime: 100,
+        pauseTime: 10,
         timeUnit: 1
     };
 

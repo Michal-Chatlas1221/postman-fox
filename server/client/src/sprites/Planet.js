@@ -17,6 +17,8 @@ export default class Planet extends Phaser.Sprite {
         this.body.immovable = true;
         this.body.bounce.set(1);
         this.body.setCircle(30);
+
+        this.graphics = game.add.graphics(0, 0);
     }
     
 }
