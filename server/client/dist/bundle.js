@@ -120566,9 +120566,27 @@
 	  }, {
 	    key: 'create',
 	    value: function create() {
+	      var _this2 = this;
 	
 	      var music = this.game.add.audio('unicorn');
 	      music.play();
+	
+	      this.addObstacle = function () {
+	        var singleObstacle = _this2.planetGroup.create(_this2.game.world.randomX, _this2.game.world.randomY, 'asteroid');
+	
+	        singleObstacle.anchor.set(0);
+	        _this2.game.physics.enable(singleObstacle, _phaser2.default.Physics.ARCADE);
+	
+	        singleObstacle.body.collideWorldBounds = true;
+	        singleObstacle.body.checkCollision.up = true;
+	        singleObstacle.body.checkCollision.down = true;
+	        singleObstacle.body.immovable = false;
+	        singleObstacle.body.bounce.set(1);
+	        singleObstacle.body.setCircle(15);
+	
+	        singleObstacle.body.velocity.x = game.rnd.integerInRange(-200, 200);
+	        singleObstacle.body.velocity.y = game.rnd.integerInRange(-200, 200);
+	      };
 	
 	      this.foxInTargetZone = function (planet, fox) {
 	        return Math.sqrt(Math.pow(planet.position.x + 30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
@@ -120614,18 +120632,8 @@
 	      this.planetGroup.physicsBodyType = _phaser2.default.Physics.ARCADE;
 	      this.planetGroup.enableBody = true;
 	
-	      for (var i = 0; i < 10; i++) {
-	        var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'asteroid');
-	
-	        singleObstacle.anchor.set(0);
-	        this.game.physics.enable(singleObstacle, _phaser2.default.Physics.ARCADE);
-	
-	        singleObstacle.body.collideWorldBounds = true;
-	        singleObstacle.body.checkCollision.up = true;
-	        singleObstacle.body.checkCollision.down = true;
-	        singleObstacle.body.immovable = false;
-	        singleObstacle.body.bounce.set(1);
-	        singleObstacle.body.setCircle(15);
+	      for (var i = 0; i < 3; i++) {
+	        this.addObstacle();
 	      }
 	
 	      this.game.add.existing(this.fox);
@@ -120650,10 +120658,12 @@
 	  }, {
 	    key: 'update',
 	    value: function update() {
-	      var _this2 = this;
+	      var _this3 = this;
 	
 	      this.physics.arcade.collide(this.fox, this.sourcePlanet);
 	      this.physics.arcade.collide(this.planetGroup, this.planetGroup);
+	      this.physics.arcade.collide(this.planetGroup, this.sourcePlanet);
+	      this.physics.arcade.collide(this.planetGroup, this.targetPlanet);
 	
 	      if (_phaser2.default.Point.equals(this.fox.body.velocity, new _phaser2.default.Point(0, 0))) {
 	        if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
@@ -120664,9 +120674,9 @@
 	      }
 	
 	      this.physics.arcade.collide(this.fox, this.targetPlanet, function () {
-	        if (_this2.fox.hasPackage) {
-	          _this2.fox.hasPackage = false;
-	          _this2.markPlanet(_this2.sourcePlanet, _this2.targetPlanet);
+	        if (_this3.fox.hasPackage) {
+	          _this3.fox.hasPackage = false;
+	          _this3.markPlanet(_this3.sourcePlanet, _this3.targetPlanet);
 	          (0, _sockets.onTargetCollision)();
 	        }
 	      });
@@ -120682,6 +120692,7 @@
 	          this.fox.hasPackage = false;
 	          this.markPlanet(this.sourcePlanet, this.targetPlanet);
 	          (0, _sockets.onDelivery)();
+	          [1, 2, 3].forEach(this.addObstacle);
 	        }
 	      }
 	

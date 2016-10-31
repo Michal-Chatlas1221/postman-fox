@@ -19,6 +19,23 @@ export default class Game extends Phaser.State {
     var music = this.game.add.audio('unicorn');
     music.play();
 
+    this.addObstacle = () => {
+      var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'asteroid');
+
+      singleObstacle.anchor.set(0);
+      this.game.physics.enable(singleObstacle, Phaser.Physics.ARCADE);
+
+      singleObstacle.body.collideWorldBounds = true;
+      singleObstacle.body.checkCollision.up = true;
+      singleObstacle.body.checkCollision.down = true;
+      singleObstacle.body.immovable = false;
+      singleObstacle.body.bounce.set(1);
+      singleObstacle.body.setCircle(15);
+
+      singleObstacle.body.velocity.x = game.rnd.integerInRange(-200, 200);
+      singleObstacle.body.velocity.y = game.rnd.integerInRange(-200, 200);
+    };
+
     this.foxInTargetZone = (planet, fox) => {
       return Math.sqrt(Math.pow(planet.position.x +30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
     };
@@ -63,18 +80,8 @@ export default class Game extends Phaser.State {
     this.planetGroup.physicsBodyType = Phaser.Physics.ARCADE;
     this.planetGroup.enableBody = true;
 
-    for (var i = 0; i < 10; i++) {
-      var singleObstacle = this.planetGroup.create(this.game.world.randomX, this.game.world.randomY, 'asteroid');
-
-      singleObstacle.anchor.set(0);
-      this.game.physics.enable(singleObstacle, Phaser.Physics.ARCADE);
-
-      singleObstacle.body.collideWorldBounds = true;
-      singleObstacle.body.checkCollision.up = true;
-      singleObstacle.body.checkCollision.down = true;
-      singleObstacle.body.immovable = false;
-      singleObstacle.body.bounce.set(1);
-      singleObstacle.body.setCircle(15);
+    for (var i = 0; i < 3; i++) {
+      this.addObstacle();
     }
 
     this.game.add.existing(this.fox);
@@ -107,6 +114,8 @@ export default class Game extends Phaser.State {
 
     this.physics.arcade.collide(this.fox, this.sourcePlanet);
     this.physics.arcade.collide(this.planetGroup, this.planetGroup);
+    this.physics.arcade.collide(this.planetGroup, this.sourcePlanet);
+    this.physics.arcade.collide(this.planetGroup, this.targetPlanet);
 
     if (Phaser.Point.equals(this.fox.body.velocity,new Phaser.Point(0,0) ) ){
       if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
@@ -137,6 +146,7 @@ export default class Game extends Phaser.State {
         this.fox.hasPackage = false;
         this.markPlanet(this.sourcePlanet, this.targetPlanet);
         onDelivery();
+        [1,2,3].forEach(this.addObstacle);
       }
     }
 
