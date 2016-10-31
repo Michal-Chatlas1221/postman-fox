@@ -90,6 +90,10 @@ export default class Game extends Phaser.State {
       {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
     this.currentScore.text = getCurrentUserScore();
 
+    this.tutorial = this.game.add.text(100, 10,
+        'Travel to planet surrounded by green circle, avoid obstacles,\n stop near planet, do not collide with planets',
+        {font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle"}
+    );
     this.currentTimer = this.game.add.text(600, 10, '',
       {font: "bold 32px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
 
@@ -100,16 +104,22 @@ export default class Game extends Phaser.State {
   }
 
   update() {
-    this.physics.arcade.collide(this.fox, this.sourcePlanet, () => {
-      if (!this.fox.hasPackage) onPackagePick();
-      this.fox.hasPackage = true;
-      this.markPlanet(this.targetPlanet, this.sourcePlanet);
-    });
+
+    this.physics.arcade.collide(this.fox, this.sourcePlanet);
+    this.physics.arcade.collide(this.planetGroup, this.planetGroup);
+
+    if (Phaser.Point.equals(this.fox.body.velocity,new Phaser.Point(0,0) ) ){
+      if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
+        this.fox.hasPackage = true;
+        this.markPlanet(this.targetPlanet, this.sourcePlanet);
+        onPackagePick();
+      }
+    }
 
     this.physics.arcade.collide(this.fox, this.targetPlanet, () => {
       if (this.fox.hasPackage)  {
         this.fox.hasPackage = false;
-        this.markPlanet(this.sourcePlanet, this.targetPlanet)
+        this.markPlanet(this.sourcePlanet, this.targetPlanet);
         onTargetCollision();
       }
     });
@@ -131,5 +141,9 @@ export default class Game extends Phaser.State {
     }
 
     this.currentScore.text = getCurrentUserScore();
+
+    if (this.currentScore.text >= 200) {
+      this.tutorial.text = '';
+    }
   }
 }

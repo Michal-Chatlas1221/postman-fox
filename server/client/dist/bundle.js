@@ -120640,6 +120640,7 @@
 	      this.currentScore = this.game.add.text(10, 10, '', { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	
+	      this.tutorial = this.game.add.text(100, 10, 'Travel to planet surrounded by green circle, avoid obstacles,\n stop near planet, do not collide with planets', { font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle" });
 	      this.currentTimer = this.game.add.text(600, 10, '', { font: "bold 32px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right" });
 	
 	      game.time.events.repeat(_phaser2.default.Timer.SECOND * 1, 100, function () {
@@ -120651,11 +120652,16 @@
 	    value: function update() {
 	      var _this2 = this;
 	
-	      this.physics.arcade.collide(this.fox, this.sourcePlanet, function () {
-	        if (!_this2.fox.hasPackage) (0, _sockets.onPackagePick)();
-	        _this2.fox.hasPackage = true;
-	        _this2.markPlanet(_this2.targetPlanet, _this2.sourcePlanet);
-	      });
+	      this.physics.arcade.collide(this.fox, this.sourcePlanet);
+	      this.physics.arcade.collide(this.planetGroup, this.planetGroup);
+	
+	      if (_phaser2.default.Point.equals(this.fox.body.velocity, new _phaser2.default.Point(0, 0))) {
+	        if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
+	          this.fox.hasPackage = true;
+	          this.markPlanet(this.targetPlanet, this.sourcePlanet);
+	          (0, _sockets.onPackagePick)();
+	        }
+	      }
 	
 	      this.physics.arcade.collide(this.fox, this.targetPlanet, function () {
 	        if (_this2.fox.hasPackage) {
@@ -120680,6 +120686,10 @@
 	      }
 	
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();
+	
+	      if (this.currentScore.text >= 200) {
+	        this.tutorial.text = '';
+	      }
 	    }
 	  }]);
 	
