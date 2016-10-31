@@ -10,7 +10,14 @@ import Planet from '../sprites/Planet';
 
 export default class Game extends Phaser.State {
 
+  preload() {
+    this.game.load.audio('unicorn', ['assets/audio/music.mp3']);
+  }
+
   create() {
+
+    var music = this.game.add.audio('unicorn');
+    music.play();
 
     this.foxInTargetZone = (planet, fox) => {
       return Math.sqrt(Math.pow(planet.position.x +30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;

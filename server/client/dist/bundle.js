@@ -120559,8 +120559,16 @@
 	  }
 	
 	  _createClass(Game, [{
+	    key: 'preload',
+	    value: function preload() {
+	      this.game.load.audio('unicorn', ['assets/audio/music.mp3']);
+	    }
+	  }, {
 	    key: 'create',
 	    value: function create() {
+	
+	      var music = this.game.add.audio('unicorn');
+	      music.play();
 	
 	      this.foxInTargetZone = function (planet, fox) {
 	        return Math.sqrt(Math.pow(planet.position.x + 30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
