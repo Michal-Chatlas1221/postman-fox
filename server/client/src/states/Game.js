@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 // import Mushroom from '../sprites/Mushroom'
 // import {setResponsiveWidth} from '../utils'
 import {onTargetCollision, onPackagePick, stopGame, onObstacleCollision, onDelivery} from '../sockets';
-import {getCurrentUserScore} from '../store';
+import {getCurrentUserScore, getLeaderBoard} from '../store';
 import {getTimer} from '../timer';
 import Fox from '../sprites/Fox';
 import Planet from '../sprites/Planet';
@@ -97,6 +97,9 @@ export default class Game extends Phaser.State {
       {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
     this.currentScore.text = getCurrentUserScore();
 
+    this.currentLeaderBoard = this.game.add.text(10, 42, '',
+        {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+
     this.tutorial = this.game.add.text(100, 10,
         'Travel to planet surrounded by green circle, avoid obstacles,\n stop near planet, do not collide with planets',
         {font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle"}
@@ -151,6 +154,11 @@ export default class Game extends Phaser.State {
     }
 
     this.currentScore.text = getCurrentUserScore();
+
+    var firstScore = (getLeaderBoard()[0] != null ? ('1. ' + getLeaderBoard()[0].name + ':' +getLeaderBoard()[0].score + '\n') : '');
+    this.currentLeaderBoard.text = firstScore + [0, 1, 2].reduce(i =>
+          getLeaderBoard()[i] != null ? ((i + 1).toString() + '. ' + getLeaderBoard()[i].name + ':' +getLeaderBoard()[i].score + '\n') : ''
+        );
 
     if (this.currentScore.text >= 200) {
       this.tutorial.text = '';

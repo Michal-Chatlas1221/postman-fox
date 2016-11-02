@@ -9100,7 +9100,7 @@
 	
 	var _Game2 = _interopRequireDefault(_Game);
 	
-	var _Leaderboard = __webpack_require__(/*! ./states/Leaderboard */ 362);
+	var _Leaderboard = __webpack_require__(/*! ./states/Leaderboard */ 364);
 	
 	var _Leaderboard2 = _interopRequireDefault(_Leaderboard);
 	
@@ -120529,11 +120529,11 @@
 	
 	var _timer = __webpack_require__(/*! ../timer */ 360);
 	
-	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 363);
+	var _Fox = __webpack_require__(/*! ../sprites/Fox */ 362);
 	
 	var _Fox2 = _interopRequireDefault(_Fox);
 	
-	var _Planet = __webpack_require__(/*! ../sprites/Planet */ 364);
+	var _Planet = __webpack_require__(/*! ../sprites/Planet */ 363);
 	
 	var _Planet2 = _interopRequireDefault(_Planet);
 	
@@ -120648,6 +120648,8 @@
 	      this.currentScore = this.game.add.text(10, 10, '', { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	
+	      this.currentLeaderBoard = this.game.add.text(10, 42, '', { font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	
 	      this.tutorial = this.game.add.text(100, 10, 'Travel to planet surrounded by green circle, avoid obstacles,\n stop near planet, do not collide with planets', { font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle" });
 	      this.currentTimer = this.game.add.text(600, 10, '', { font: "bold 32px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right" });
 	
@@ -120698,6 +120700,11 @@
 	
 	      this.currentScore.text = (0, _store.getCurrentUserScore)();
 	
+	      var firstScore = (0, _store.getLeaderBoard)()[0] != null ? '1. ' + (0, _store.getLeaderBoard)()[0].name + ':' + (0, _store.getLeaderBoard)()[0].score + '\n' : '';
+	      this.currentLeaderBoard.text = firstScore + [0, 1, 2].reduce(function (i) {
+	        return (0, _store.getLeaderBoard)()[i] != null ? (i + 1).toString() + '. ' + (0, _store.getLeaderBoard)()[i].name + ':' + (0, _store.getLeaderBoard)()[i].score + '\n' : '';
+	      });
+	
 	      if (this.currentScore.text >= 200) {
 	        this.tutorial.text = '';
 	      }
@@ -120711,74 +120718,6 @@
 
 /***/ },
 /* 362 */
-/*!***********************************!*\
-  !*** ./src/states/Leaderboard.js ***!
-  \***********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _phaser = __webpack_require__(/*! phaser */ 303);
-	
-	var _phaser2 = _interopRequireDefault(_phaser);
-	
-	var _store = __webpack_require__(/*! ../store */ 310);
-	
-	var _timer = __webpack_require__(/*! ../timer */ 360);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LeaderBoard = function (_Phaser$State) {
-	  _inherits(LeaderBoard, _Phaser$State);
-	
-	  function LeaderBoard() {
-	    _classCallCheck(this, LeaderBoard);
-	
-	    return _possibleConstructorReturn(this, (LeaderBoard.__proto__ || Object.getPrototypeOf(LeaderBoard)).apply(this, arguments));
-	  }
-	
-	  _createClass(LeaderBoard, [{
-	    key: 'preload',
-	    value: function preload() {
-	      this.leaderBoard = (0, _store.getLeaderBoard)();
-	    }
-	  }, {
-	    key: 'create',
-	    value: function create() {
-	      this.currentScoreTitle = this.game.add.text(330, 10, '', { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
-	      this.currentScoreTitle.text = "SCORE";
-	      this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, (0, _store.getLeaderBoard)(), { font: "regular 24px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
-	      this.currentScore.anchor.set(0.5);
-	    }
-	  }, {
-	    key: 'update',
-	    value: function update() {
-	      this.leaderBoard = (0, _store.getLeaderBoard)();
-	      this.currentScore.text = this.leaderBoard.map(function (e) {
-	        return e.name + ' : ' + e.score;
-	      }).join('\n');
-	    }
-	  }]);
-	
-	  return LeaderBoard;
-	}(_phaser2.default.State);
-	
-	exports.default = LeaderBoard;
-
-/***/ },
-/* 363 */
 /*!****************************!*\
   !*** ./src/sprites/Fox.js ***!
   \****************************/
@@ -120854,7 +120793,7 @@
 	exports.default = Fox;
 
 /***/ },
-/* 364 */
+/* 363 */
 /*!*******************************!*\
   !*** ./src/sprites/Planet.js ***!
   \*******************************/
@@ -120912,6 +120851,74 @@
 	}(_phaser2.default.Sprite);
 	
 	exports.default = Planet;
+
+/***/ },
+/* 364 */
+/*!***********************************!*\
+  !*** ./src/states/Leaderboard.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _phaser = __webpack_require__(/*! phaser */ 303);
+	
+	var _phaser2 = _interopRequireDefault(_phaser);
+	
+	var _store = __webpack_require__(/*! ../store */ 310);
+	
+	var _timer = __webpack_require__(/*! ../timer */ 360);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LeaderBoard = function (_Phaser$State) {
+	  _inherits(LeaderBoard, _Phaser$State);
+	
+	  function LeaderBoard() {
+	    _classCallCheck(this, LeaderBoard);
+	
+	    return _possibleConstructorReturn(this, (LeaderBoard.__proto__ || Object.getPrototypeOf(LeaderBoard)).apply(this, arguments));
+	  }
+	
+	  _createClass(LeaderBoard, [{
+	    key: 'preload',
+	    value: function preload() {
+	      this.leaderBoard = (0, _store.getLeaderBoard)();
+	    }
+	  }, {
+	    key: 'create',
+	    value: function create() {
+	      this.currentScoreTitle = this.game.add.text(330, 10, '', { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	      this.currentScoreTitle.text = "SCORE";
+	      this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, (0, _store.getLeaderBoard)(), { font: "regular 24px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" });
+	      this.currentScore.anchor.set(0.5);
+	    }
+	  }, {
+	    key: 'update',
+	    value: function update() {
+	      this.leaderBoard = (0, _store.getLeaderBoard)();
+	      this.currentScore.text = this.leaderBoard.map(function (e) {
+	        return e.name + ' : ' + e.score;
+	      }).join('\n');
+	    }
+	  }]);
+	
+	  return LeaderBoard;
+	}(_phaser2.default.State);
+	
+	exports.default = LeaderBoard;
 
 /***/ }
 /******/ ]);
