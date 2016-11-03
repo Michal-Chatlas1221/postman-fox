@@ -37,17 +37,17 @@ export default class Game extends Phaser.State {
     };
 
     this.foxInTargetZone = (planet, fox) => {
-      return Math.sqrt(Math.pow(planet.position.x +30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
+      return Math.sqrt(Math.pow(planet.position.x + 30 - fox.position.x, 2) + Math.pow(planet.position.y + 30 - fox.position.y, 2)) < 100;
     };
 
     this.markPlanet = (planet, toRemove) => {
       toRemove.graphics = toRemove.game.add.graphics(0, 0);
       toRemove.graphics.lineStyle(2, 0xFF0000, 1);
-      toRemove.graphics.drawCircle(toRemove.x+30, toRemove.y+30, 200);
+      toRemove.graphics.drawCircle(toRemove.x + 30, toRemove.y + 30, 200);
 
       planet.graphics = planet.game.add.graphics(0, 0);
       planet.graphics.lineStyle(2, 0x00FF00, 1);
-      planet.graphics.drawCircle(planet.x+30, planet.y+30, 200);
+      planet.graphics.drawCircle(planet.x + 30, planet.y + 30, 200);
     };
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -98,13 +98,13 @@ export default class Game extends Phaser.State {
     this.currentScore.text = getCurrentUserScore();
 
     this.currentLeaderBoard = this.game.add.text(10, 42, '',
-        {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+      {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
 
     this.currentTimer = this.game.add.text(this.game.width - 60, 10, '',
       {font: "bold 28px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
 
     game.time.events.repeat(Phaser.Timer.SECOND * 1, 100, function () {
-      this.currentTimer.text =  getTimer();
+      this.currentTimer.text = getTimer();
     }, this);
   }
 
@@ -115,7 +115,7 @@ export default class Game extends Phaser.State {
     this.physics.arcade.collide(this.planetGroup, this.sourcePlanet);
     this.physics.arcade.collide(this.planetGroup, this.targetPlanet);
 
-    if (Phaser.Point.equals(this.fox.body.velocity,new Phaser.Point(0,0) ) ){
+    if (Phaser.Point.equals(this.fox.body.velocity, new Phaser.Point(0, 0))) {
       if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
         this.fox.hasPackage = true;
         this.markPlanet(this.targetPlanet, this.sourcePlanet);
@@ -124,7 +124,7 @@ export default class Game extends Phaser.State {
     }
 
     this.physics.arcade.collide(this.fox, this.targetPlanet, () => {
-      if (this.fox.hasPackage)  {
+      if (this.fox.hasPackage) {
         this.fox.hasPackage = false;
         this.markPlanet(this.sourcePlanet, this.targetPlanet);
         onTargetCollision();
@@ -139,20 +139,17 @@ export default class Game extends Phaser.State {
       this.fox.hasPackage = false;
     }
 
-    if (Phaser.Point.equals(this.fox.body.velocity,new Phaser.Point(0,0) ) ){
+    if (Phaser.Point.equals(this.fox.body.velocity, new Phaser.Point(0, 0))) {
       if (this.foxInTargetZone(this.targetPlanet, this.fox) && this.fox.hasPackage) {
         this.fox.hasPackage = false;
         this.markPlanet(this.sourcePlanet, this.targetPlanet);
         onDelivery();
-        [1,2,3].forEach(this.addObstacle);
+        [1, 2, 3].forEach(this.addObstacle);
       }
     }
 
-    this.currentScore.text = getCurrentUserScore();
-
-    var firstScore = (getLeaderBoard()[0] != null ? ('1. ' + getLeaderBoard()[0].name + ':' +getLeaderBoard()[0].score + '\n') : '');
-    this.currentLeaderBoard.text = firstScore + [0, 1, 2].reduce(i =>
-          getLeaderBoard()[i] != null ? ((i + 1).toString() + '. ' + getLeaderBoard()[i].name + ':' +getLeaderBoard()[i].score + '\n') : ''
-        );
+    this.currentLeaderBoard.text = getLeaderBoard()
+      .map((e, i) => `${(i + 1).toString()}.  + ${e}.name : ${e.score} \n`)
+      .slice(0, 4);
   }
 }
