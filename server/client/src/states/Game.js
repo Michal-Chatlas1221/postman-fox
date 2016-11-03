@@ -100,10 +100,6 @@ export default class Game extends Phaser.State {
     this.currentLeaderBoard = this.game.add.text(10, 42, '',
         {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
 
-    this.tutorial = this.game.add.text(20, this.game.height - 30,
-        'Travel to planet surrounded by green circle, avoid obstacles, stop near planet, do not collide with planets',
-        {font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle"}
-    );
     this.currentTimer = this.game.add.text(this.game.width - 60, 10, '',
       {font: "bold 28px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
 
@@ -158,9 +154,5 @@ export default class Game extends Phaser.State {
     this.currentLeaderBoard.text = firstScore + [0, 1, 2].reduce(i =>
           getLeaderBoard()[i] != null ? ((i + 1).toString() + '. ' + getLeaderBoard()[i].name + ':' +getLeaderBoard()[i].score + '\n') : ''
         );
-
-    if (this.currentScore.text >= 200) {
-      this.tutorial.text = '';
-    }
   }
 }

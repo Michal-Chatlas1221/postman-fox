@@ -13,6 +13,7 @@ export default class Login extends Phaser.State {
     }
 
     create() {
+        this.add.tileSprite(0, 0, this.game.width, this.game.height, 'instructions');
         this.formInput.setAttribute('value', window.localStorage.getItem('username') || '');
     }
 

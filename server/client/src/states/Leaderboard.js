@@ -8,7 +8,7 @@ export default class LeaderBoard extends Phaser.State {
   }
 
   create() {
-    this.currentScoreTitle = this.game.add.text(this.game.width/2 - 150, 10, '',
+    this.currentScoreTitle = this.game.add.text(this.game.width/2 - 120, 10, '',
       {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
     this.currentScoreTitle.text = "Leaderboard";
     this.currentScore = this.game.add.text(this.game.world.centerX, this.game.world.centerY, getLeaderBoard(),
