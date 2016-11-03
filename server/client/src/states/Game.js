@@ -1,7 +1,5 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
-// import Mushroom from '../sprites/Mushroom'
-// import {setResponsiveWidth} from '../utils'
 import {onTargetCollision, onPackagePick, stopGame, onObstacleCollision, onDelivery} from '../sockets';
 import {getCurrentUserScore, getLeaderBoard} from '../store';
 import {getTimer} from '../timer';
@@ -98,7 +96,7 @@ export default class Game extends Phaser.State {
     this.currentScore.text = getCurrentUserScore();
 
     this.currentLeaderBoard = this.game.add.text(10, 42, '',
-      {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+      {font: "14px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "middle"});
 
     this.currentTimer = this.game.add.text(this.game.width - 60, 10, '',
       {font: "bold 28px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
@@ -149,7 +147,8 @@ export default class Game extends Phaser.State {
     }
 
     this.currentLeaderBoard.text = getLeaderBoard()
-      .map((e, i) => `${(i + 1).toString()}.  + ${e}.name : ${e.score} \n`)
-      .slice(0, 4);
+      .map((e, i) => `${(i + 1).toString()}. ${e.name} : ${e.score}`)
+      .slice(0, 4)
+      .join('\n');
   }
 }
