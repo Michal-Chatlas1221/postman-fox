@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "http-server -p 8080",
     "watch": "scss --watch styles/scss/style.scss:styles/style.css",
-    "build": "scss styles/scss/style.scss styles/style.css",
+    "build": "webpack --config webpack.production.config.js",
     "webpack": "webpack"
   },
   "keywords": [],
