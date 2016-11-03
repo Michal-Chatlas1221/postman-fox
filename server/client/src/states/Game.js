@@ -94,23 +94,22 @@ export default class Game extends Phaser.State {
     this.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
 
     this.currentScore = this.game.add.text(10, 10, '',
-      {font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
+      {font: "bold 28px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
     this.currentScore.text = getCurrentUserScore();
 
     this.currentLeaderBoard = this.game.add.text(10, 42, '',
         {font: "16px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle"});
 
-    this.tutorial = this.game.add.text(100, 10,
-        'Travel to planet surrounded by green circle, avoid obstacles,\n stop near planet, do not collide with planets',
+    this.tutorial = this.game.add.text(20, this.game.height - 30,
+        'Travel to planet surrounded by green circle, avoid obstacles, stop near planet, do not collide with planets',
         {font: 'bold 16px Arial', fill: '#fff', boundsAlignH: "center", boundsAlignV: "middle"}
     );
-    this.currentTimer = this.game.add.text(600, 10, '',
-      {font: "bold 32px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
+    this.currentTimer = this.game.add.text(this.game.width - 60, 10, '',
+      {font: "bold 28px Arial", fill: "#eee", boundsAlignH: "right", boundsAlignV: "right"});
 
     game.time.events.repeat(Phaser.Timer.SECOND * 1, 100, function () {
-      this.currentTimer.text = "Time left: " + getTimer();
+      this.currentTimer.text =  getTimer();
     }, this);
-
   }
 
   update() {
