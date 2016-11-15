@@ -10,6 +10,8 @@ export default class Game extends Phaser.State {
 
   preload() {
     this.game.load.audio('unicorn', ['assets/audio/music.mp3']);
+    this.game.load.spritesheet('ship', 'assets/games/asteroids/ship.png');
+    this.game.load.spritesheet('ship_package', 'assets/games/asteroids/ship_package.png');
   }
 
   create() {
@@ -117,6 +119,7 @@ export default class Game extends Phaser.State {
       if (this.foxInTargetZone(this.sourcePlanet, this.fox) && !this.fox.hasPackage) {
         this.fox.hasPackage = true;
         this.markPlanet(this.targetPlanet, this.sourcePlanet);
+        this.fox.loadTexture('ship_package');
         onPackagePick();
       }
     }
@@ -125,6 +128,7 @@ export default class Game extends Phaser.State {
       if (this.fox.hasPackage) {
         this.fox.hasPackage = false;
         this.markPlanet(this.sourcePlanet, this.targetPlanet);
+        this.fox.loadTexture('ship');
         onTargetCollision();
       }
     });
@@ -133,6 +137,7 @@ export default class Game extends Phaser.State {
       }, e => {
       }, this)) {
       this.markPlanet(this.sourcePlanet, this.targetPlanet);
+      this.fox.loadTexture('ship');
       if (this.fox.hasPackage) onObstacleCollision();
       this.fox.hasPackage = false;
     }
@@ -140,6 +145,7 @@ export default class Game extends Phaser.State {
     if (Phaser.Point.equals(this.fox.body.velocity, new Phaser.Point(0, 0))) {
       if (this.foxInTargetZone(this.targetPlanet, this.fox) && this.fox.hasPackage) {
         this.fox.hasPackage = false;
+        this.fox.loadTexture('ship');
         this.markPlanet(this.sourcePlanet, this.targetPlanet);
         onDelivery();
         [1, 2, 3].forEach(this.addObstacle);
