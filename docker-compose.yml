@@ -17,3 +17,20 @@ server:
    - 1923:1923
  links:
    - mongodb
+client:
+ container_name: postman_client
+ image: node
+ volumes:
+   - ./client:/app/client
+ working_dir: /app/client
+ command: npm run build
+nginx:
+  build: ./nginx
+  working_dir: /app/client
+  ports:
+    - 8081:80
+    - 1924:1924
+  volumes:
+   - ./client:/app/client
+  links:
+    - server:server

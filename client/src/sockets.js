@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import store from './store';
 import {getTimer, timerStart, timerDecrease, setTimer} from './timer';
-const socket = io(':1923');
+const socket = io();
 
 socket.on('start', startNewGame);
 socket.on('stop', stopGame);
