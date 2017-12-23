@@ -20,7 +20,7 @@ export default class Login extends Phaser.State {
     onSubmit() {
         const username = this.formInput.value;
 
-        fetch('/api/users', {
+        fetch('/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
