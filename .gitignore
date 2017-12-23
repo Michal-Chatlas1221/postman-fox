@@ -41,4 +41,3 @@ client/.sass-cache
 postman-fox.iml
 
 server/client/dist/*
-client/dist/*
